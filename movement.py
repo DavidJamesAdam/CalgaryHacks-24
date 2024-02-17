@@ -1,0 +1,1 @@
+# Placeholder class. Movement and drawing are handled by the Player class.

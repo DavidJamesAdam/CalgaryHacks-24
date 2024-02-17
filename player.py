@@ -1,0 +1,1 @@
+# Character class. Movement, drawing, and collision detection.
