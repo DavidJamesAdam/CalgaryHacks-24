@@ -14,8 +14,14 @@ dt = 0
 
 # initializing objects
 all_sprites = pygame.sprite.Group() # create a group for all sprites
+player_group = pygame.sprite.Group() # create a group for the player
+enemies_group = pygame.sprite.Group() # create a group for the enemies
+#bullets_group = pygame.sprite.Group() # create a group for the bullets
+traps_group = pygame.sprite.Group() # create a group for the traps
+obstacles_group = pygame.sprite.Group() # create a group for the obstacles
 
 player = Player(screen)
+player_group.add(player) # add the player to the group
 all_sprites.add(player) # add the player to the group
 
 
@@ -31,6 +37,9 @@ while running:
     screen.blit(bg, (0, 0))
 
     key = pygame.key.get_pressed()
+
+    
+
     # Create collisiong checking for the player here
     player.move(key, dt)
     screen.fill("purple")
