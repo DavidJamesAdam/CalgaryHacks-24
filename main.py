@@ -13,7 +13,7 @@ running = True
 dt = 0
 
 # initializing objects
-player = Player(screen, dt)
+player = Player(screen)
 
 while running:
     # poll for events
