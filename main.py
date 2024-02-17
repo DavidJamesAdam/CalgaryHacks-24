@@ -1,6 +1,7 @@
 # Example file showing a circle moving on screen
 import pygame
 from player import Player
+from levelManager import LevelManager
 
 
 
@@ -14,6 +15,11 @@ dt = 0
 
 # initializing objects
 player = Player(screen)
+surface = pygame.display.get_surface()
+wallColour = pygame.Color(0,0,0)
+wallStartThickness = 50
+levManager = LevelManager(surface, wallColour, wallStartThickness)
+levManager.loadLevel(0)
 
 while running:
     # poll for events
@@ -25,11 +31,11 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
     screen.blit(bg, (0, 0))
+    levManager.drawLevel()
 
     key = pygame.key.get_pressed()
     # Create collisiong checking for the player here
     player.move(key, dt)
-    screen.fill("purple")
     player.draw()
 
     # flip() the display to put your work on screen
