@@ -76,4 +76,5 @@ def spawn_enemy_at_edge(screen_width, screen_height, enemy_radius):
     if edge == 'bottom':
         y -= enemy_radius * 2
     
-    return Enemy(x, y, enemy_radius)
+    enemy_type = random.choice([FastEnemy, StrongEnemy])
+    return enemy_type(x, y, enemy_radius)
