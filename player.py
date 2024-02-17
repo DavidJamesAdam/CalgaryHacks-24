@@ -11,8 +11,8 @@ class Player(pygame.sprite.Sprite):
         # Call the parent class (Sprite) constructor
         pygame.sprite.Sprite.__init__(self)
         self.screen = screen
-        self.original_image = pygame.image.load("images/player.png")
-        self.image = pygame.image.load("images/player.png")
+        self.original_image = pygame.image.load("images/lil_player.png")
+        self.image = self.original_image
         self.rect = self.image.get_rect()
         self.rect.center = (screen.get_width() / 2, screen.get_height() / 2)
         
