@@ -6,7 +6,8 @@ from player import Player
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1920, 1080))
+bg = pygame.image.load("images\\background.jpg")
+screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
@@ -22,7 +23,8 @@ while running:
             running = False
 
     # fill the screen with a color to wipe away anything from last frame
-    
+    screen.fill("purple")
+    screen.blit(bg, (0, 0))
 
     key = pygame.key.get_pressed()
     # Create collisiong checking for the player here
