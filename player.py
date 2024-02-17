@@ -8,7 +8,7 @@ class Player:
 
     def __init__(self, screen):
         self.screen = screen
-        self.image = pygame.image.load("player.png")
+        self.image = pygame.image.load("images\lil_player.png")
         self.player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
 
