@@ -59,6 +59,10 @@ class StrongEnemy(Enemy):
     def __init__(self, start_x, start_y):
         super().__init__(start_x, start_y, radius=15, max_health=200, speed=1, colour=(0, 0, 255))
 
+class RegularEnemy(Enemy):
+     def __init__(self, start_x, start_y):
+        super().__init__(start_x, start_y, radius=15, max_health=100, speed=2, colour=(255, 0, 0))
+
 
 def spawn_enemy_at_edge(screen_width, screen_height, enemy_radius):
     edge = random.choice(['top', 'bottom', 'left', 'right'])
@@ -76,5 +80,5 @@ def spawn_enemy_at_edge(screen_width, screen_height, enemy_radius):
     if edge == 'bottom':
         y -= enemy_radius * 2
     
-    enemy_type = random.choice([FastEnemy, StrongEnemy])
+    enemy_type = random.choice([FastEnemy, StrongEnemy, RegularEnemy])
     return enemy_type(x, y)

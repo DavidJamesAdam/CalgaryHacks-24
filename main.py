@@ -9,7 +9,7 @@ from levelManager import LevelManager
 # pygame setup
 pygame.init()
 bg = pygame.image.load("images/background.jpg")
-screen = pygame.display.set_mode((1920, 1080))
+screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
@@ -70,7 +70,7 @@ while running:
 
     # Create collisiong checking for the player here
     player.move(key, dt)
-    screen.fill("purple")
+    #screen.fill("purple")
 
     # sprite management
     all_sprites.update()
