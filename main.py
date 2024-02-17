@@ -14,7 +14,7 @@ running = True
 dt = 0
 
 # initializing objects
-player = Player(screen, dt)
+player = Player(screen)
 surface = pygame.display.get_surface()
 wallColour = pygame.Color(0,0,0)
 wallStartThickness = 50

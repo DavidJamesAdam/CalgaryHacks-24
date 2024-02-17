@@ -6,7 +6,7 @@ import pygame
 class Player: 
  
 
-    def __init__(self, screen, dt):
+    def __init__(self, screen):
         self.screen = screen
         self.image = pygame.image.load("player.png")
         self.player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
@@ -15,11 +15,7 @@ class Player:
 
     def update_pos(self, coord_x, coord_y):
         self.player_pos = pygame.Vector2(coord_x, coord_y)
-    def update_xpos(self, coord_x):
-        self.player_pos.x += coord_x
-
-    def update_ypos(self, coord_y):
-        self.player_pos.y += coord_y
+   
 
     def draw(self):
         self.screen.blit(self.image , self.player_pos)
