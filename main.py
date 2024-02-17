@@ -23,15 +23,15 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        # elif event.type == pygame.MOUSEBUTTONDOWN:
-        #     # Get the position of the mouse click
-        #     click_pos = pygame.mouse.get_pos()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # Get the position of the mouse click
+            click_pos = pygame.mouse.get_pos()
 
-        #     # Check each enemy to see if it was clicked
-        #     for enemy in enemies_list:
-        #         distance = ((enemy.pos[0] - click_pos[0]) ** 2 + (enemy.pos[1] - click_pos[1]) ** 2) ** 0.5
-        #         if distance < enemy.radius:  # The click is within the enemy's circle
-        #             enemy.current_health -= 10  # Decrease health by 10
+            # Check each enemy to see if it was clicked
+            for enemy in enemies_list:
+                distance = ((enemy.pos[0] - click_pos[0]) ** 2 + (enemy.pos[1] - click_pos[1]) ** 2) ** 0.5
+                if distance < enemy.radius:  # The click is within the enemy's circle
+                    enemy.current_health -= 10  # Decrease health by 10
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
@@ -55,7 +55,7 @@ while running:
         enemies_list.append(new_enemy)
     for enemy in enemies_list:
         enemy.move_towards(player_pos)
-        pygame.draw.circle(screen, (255, 0, 0), enemy.pos, enemy.radius)  # Draw enemy as a circle
+        enemy.draw  # Draw enemy as a circle
         enemy.draw_health_bar(screen)  # Draw health bar above each enemy
     for enemy in enemies_list[:]:  # Iterate over a slice copy of the list to avoid modification issues
         # Check for defeated enemies

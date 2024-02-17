@@ -10,12 +10,13 @@ import pygame
 import random
 
 class Enemy:
-    def __init__(self, start_x, start_y, radius = 10, max_health = 100):
+    def __init__(self, start_x, start_y, radius = 10, max_health = 100, speed = 2, colour = (255, 0, 0)):
         self.pos = [start_x, start_y]
-        self.speed = 2
+        self.speed = speed
         self.radius = radius
         self.max_health = max_health
         self.current_health = max_health
+        self.colour = colour
 
 
     def move_towards(self, target_pos):
@@ -44,6 +45,20 @@ class Enemy:
         # Health bar fill
         health_rect = pygame.Rect(self.pos[0] - bar_width / 2, self.pos[1] - self.radius - bar_height - 5, fill, bar_height)
         pygame.draw.rect(screen, (255, 0, 0), health_rect)
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.colour, self.pos, self.radius)
+        self.draw_health_bar(screen)
+
+class FastEnemy(Enemy):
+    def __init__(self, start_x, start_y):
+        super().__init__(start_x, start_y, radius=8, max_health=50, speed=4, color=(0, 255, 0))
+
+
+class StrongEnemy(Enemy):
+    def __init__(self, start_x, start_y):
+        super().__init__(start_x, start_y, radius=15, max_health=200, speed=1, color=(0, 0, 255))
+
 
 def spawn_enemy_at_edge(screen_width, screen_height, enemy_radius):
     edge = random.choice(['top', 'bottom', 'left', 'right'])
