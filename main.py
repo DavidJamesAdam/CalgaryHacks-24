@@ -13,7 +13,8 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 
-# initializing objects
+
+# sprite setup
 all_sprites = pygame.sprite.Group() # create a group for all sprites
 player_group = pygame.sprite.Group() # create a group for the player
 enemies_group = pygame.sprite.Group() # create a group for the enemies
@@ -21,13 +22,19 @@ enemies_group = pygame.sprite.Group() # create a group for the enemies
 traps_group = pygame.sprite.Group() # create a group for the traps
 obstacles_group = pygame.sprite.Group() # create a group for the obstacles
 
+
+# create the player
 player = Player(screen)
+player_group.add(player) # add the player to the group
+
+# create the level manager
 surface = pygame.display.get_surface()
 wallColour = pygame.Color(0,0,0)
 wallStartThickness = 50
 levManager = LevelManager(surface, wallColour, wallStartThickness)
 levManager.loadLevel(0)
-player_group.add(player) # add the player to the group
+
+# add the player to the all_sprites group
 all_sprites.add(player) # add the player to the group
 
 
