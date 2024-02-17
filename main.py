@@ -3,6 +3,7 @@ import pygame
 
 # pygame setup
 pygame.init()
+bg = pygame.image.load("images\\background.jpg")
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
@@ -19,6 +20,7 @@ while running:
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
+    screen.blit(bg, (0, 0))
 
     pygame.draw.circle(screen, "red", player_pos, 40)
 

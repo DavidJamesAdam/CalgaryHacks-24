@@ -4,3 +4,9 @@
 
 # Enemy ai goes towards the player and "attacks" the player
 # by colliding with the player.
+
+# import pygame
+
+# class Enemy:
+
+#     defom __init__ 
