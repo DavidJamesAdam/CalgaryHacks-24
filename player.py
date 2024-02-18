@@ -55,6 +55,16 @@ class Player(pygame.sprite.Sprite):
         '''
         self.image = pygame.image.load(image)
 
+    def damage(self, amount):
+        '''
+        Damage the player by a certain amount.
+        '''
+        self.curr_health -= amount
+        if self.curr_health < 0:
+            self.curr_health = 0
+        self.draw_health_bar()
+
+
     def return_rect(self):
         '''
         Return the center rectangle of the player.
