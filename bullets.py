@@ -5,7 +5,7 @@ class Bullet(pygame.sprite.Sprite):
     
     def __init__(self, angle, p_x, p_y, screen):
         super().__init__()
-        self.image = pygame.image.load("images/lil_player_armed.png")  # Example bullet size
+        self.image = pygame.image.load("images/bullet.png")  # Example bullet size
         self.rect = self.image.get_rect()
         self.screen = screen
         self.rect.x = p_x

@@ -99,14 +99,14 @@ def main():
 
         # fill the screen with a color to wipe away anything from last frame
         # screen.fill("purple")
-        # screen.blit(bg, (0, 0))
+        screen.blit(bg, (0, 0))
         lvlManager.drawLevel()
 
         key = pygame.key.get_pressed()
     
         bullet_collision = pygame.sprite.groupcollide(bullets_group, enemies_group, False, False)
         for bullet, enemy in bullet_collision.items():
-            enemy[0].current_health -= bullet.damage()
+            enemy[0].current_health -= bullet.damage
             bullet.kill()
             enemy[0].draw_health_bar(screen)
             if enemy[0].current_health <= 0:
