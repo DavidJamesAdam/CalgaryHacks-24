@@ -1,25 +1,31 @@
 import pygame
 from levelList import LevelList
+from portal import Portal
 
 # Level design class.
 # Level drawing, updating, and collision detection done in this class.
 
 class LevelManager:
-    def __init__(self,surface, wallShade, wallThicc, wallUpdateRate, wallSpriteGroup):
+    def __init__(self,surface, wallShade, wallThicc, wallUpdateRate, wallSpriteGroup, player):
         self.surface = surface
         self.screenSize = surface.get_size()
         self.wallColour = wallShade
         self.wallThickness = wallThicc
         self.wallUpdateRate = wallUpdateRate
         self.wallUpdateTick = 0
+        self.player = player
         
         # level is made of a series of boxes, each of which can increase/decrease in size, and also a background colour
         self.levelRectangles = []
         self.wallSprites = []
         self.wallSpriteGroup = wallSpriteGroup
+        self.levelNumber = -1
 
         # levelList
         self.lvls = LevelList(self.screenSize,self.wallThickness)
+
+        self.portal = 0
+        self.levelMax = 0
 
         # wall image
         self.wallImage = pygame.image.load("images/WallTexture.png")
@@ -35,9 +41,12 @@ class LevelManager:
             self.wallSprites.append(newSprite)
     # loads a level based on the preset level list
     def loadLevel(self, levelNum):
-        print(levelNum)
-        rects =self.lvls.getLevel(levelNum)
+        rects = self.lvls.getLevel(levelNum)
         self.loadLevelList(rects)
+        portalLocation = self.lvls.getPortalLocation(levelNum)
+        self.levelMax = self.lvls.getLevelMax(levelNum)
+        print(self.levelMax)
+        self.portal = Portal(self.surface,self.wallThickness,portalLocation,self.player,self.levelMax)
 
     # adds a rectangle as a wall to the current level
     def addWall(self, wallRect):
@@ -62,6 +71,8 @@ class LevelManager:
         for i in range(len(self.levelRectangles)): #for all boxes in the level
             #pygame.draw.rect(self.surface, self.wallColour, self.levelRectangles[i]) #draw the box
             self.surface.blit(self.wallSprites[i].image,self.levelRectangles[i])
+
+        self.portal.drawPortal()
             
     # check collisions with level
     def detectWallCollisions(self,spriteGroup):
@@ -95,6 +106,8 @@ class LevelManager:
 
         for sprite in self.wallSprites:
             self.refitSprite(sprite)
+
+        self.portal.updatePortal()
 
     # later feature to add move the door, maybe other objects if it collides with any of the rectangles, if it does
 
