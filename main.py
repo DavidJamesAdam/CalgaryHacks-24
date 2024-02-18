@@ -107,9 +107,9 @@ def main():
         spawn_timer += 1
         if spawn_timer >= spawn_interval:
             spawn_timer = 0
-            new_enemy = spawn_enemy_at_edge(screen.get_width(), screen.get_height(), enemies.radius)
+            # new_enemy = spawn_enemy_at_edge(screen.get_width(), screen.get_height(), enemies.radius)
+            new_enemy = spawn_enemy_at_edge(lvlManager.levelRectangles, screen.get_height(), enemies.radius)
             enemies_group.add(new_enemy)
-            # new_enemy = lvlManager.spawn_enemy_within_box(enemies.width, enemies.height)
             enemies_list.append(new_enemy)
         for enemy in enemies_list:
             if hasattr(enemy, 'update_teleport'):
