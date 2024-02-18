@@ -4,11 +4,13 @@ from levelList import LevelList
 # Level drawing, updating, and collision detection done in this class.
 
 class LevelManager:
-    def __init__(self,surface, wallShade, wallThicc):
+    def __init__(self,surface, wallShade, wallThicc, wallUpdateRate):
         self.surface = surface
         self.screenSize = surface.get_size()
         self.wallColour = wallShade
         self.wallThickness = wallThicc
+        self.wallUpdateRate = wallUpdateRate
+        self.wallUpdateTick = 0
         
         # level is made of a series of boxes, each of which can increase/decrease in size, and also a background colour
         self.levelRectangles = []
@@ -21,10 +23,8 @@ class LevelManager:
         self.levelRectangles = rectList
 
     def loadLevel(self, levelNum):
-        if (self.lvls.numLevels() < levelNum) :
-            self.levelRectangles = self.lvls.getLevel(levelNum)
-        else :
-            self.levelRectangles = self.lvls.getLevel(0)
+        self.levelRectangles = self.lvls.getLevel(levelNum)
+            
 
     # draw level
     def drawLevel(self):
@@ -41,6 +41,22 @@ class LevelManager:
     # if (obj Right => box Left || obj Leftt <= box Right) && (obj Top => box Bottom || obj Bottom <= box Top)
     # collision, return true
     # else next box
+
+    def updateLevel(self):
+        updatePx = self.wallUpdateRate / 2
+        if (updatePx):
+            self.wallUpdateTick += updatePx
+            updatePx = 0
+
+        if (self.wallUpdateTick > 2):
+            updatePx += 1
+            self.wallUpdateTick = 0
+
+        for box in self.levelRectangles:
+            box.left -= updatePx
+            box.width += updatePx * 2
+            box.top -= updatePx
+            box.height += updatePx * 2
 
     # update level
     # takes in size change
