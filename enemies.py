@@ -9,15 +9,20 @@ from pygame.locals import *
 import pygame
 import random
 
-class Enemy:
+class Enemy(pygame.sprite.Sprite):
     def __init__(self, start_x, start_y, radius = 10, max_health = 100, speed = 2):
+        pygame.sprite.Sprite.__init__(self)
         self.pos = [start_x, start_y]
         self.speed = speed
         self.radius = radius
         self.max_health = max_health
         self.current_health = max_health
-        self.image = pygame.image.load("images/regular_alien.png").convert_alpha()
+        self.original_image = pygame.image.load("images/regular_alien.png").convert_alpha()
+        self.image = self.original_image
         self.rect = self.image.get_rect(center=(start_x, start_y))
+        self.image.get_rect()
+        self.width = self.rect.width
+        self.height = self.rect.height
 
 
     def move_towards(self, target_pos):

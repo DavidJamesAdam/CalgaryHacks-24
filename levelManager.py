@@ -83,14 +83,13 @@ class LevelManager:
     #     else:
     #         return pygame.Rect(0, 0, *self.screenSize)  # Fallback to full screen size
         
-    # def spawn_enemy_within_box(self):
-    #     playable_area = self.get_playable_area()
-    #     x = random.randint(playable_area.left, playable_area.right)
-    #     y = random.randint(playable_area.top, playable_area.bottom)
+    # def spawn_enemy_within_box(self, enemy_width, enemy_height):
+    #     playable_area = self.get_playable_area()  # Ensure this method returns the current level box as a pygame.Rect
+    #     x = random.randint(playable_area.left, playable_area.right - enemy_width)
+    #     y = random.randint(playable_area.top, playable_area.bottom - enemy_height)
 
-    #     # Adjust x and y based on enemy size if necessary
     #     enemy_type = random.choice([FastEnemy, StrongEnemy, RegularEnemy, TeleportingEnemy])
-    #     return enemy_type(x, y)  # Assuming Enemy is accessible here
+    #     return enemy_type(x, y)  # Adjust parameters as needed
 
 
 
