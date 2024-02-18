@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):
         # Call the parent class (Sprite) constructor
         pygame.sprite.Sprite.__init__(self)
         self.screen = screen
-        self.original_image = pygame.image.load("images/lil_player.png")
+        self.original_image = pygame.image.load("images/lil_player_armed.png")
         self.image = self.original_image
         self.rect = self.image.get_rect()
         self.rect.center = (screen.get_width() / 2, screen.get_height() / 2)
@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.max_health = max_health
         self.curr_health = max_health
         self.radius = self.rect.width / 2
+        self.score = 0
         
     # def damage(self, amount):
     #     self.curr_health -= amount
