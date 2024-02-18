@@ -33,9 +33,13 @@ wall_group = pygame.sprite.Group() # create a group for walls
 
 # create the player
 player = Player(screen, MAX_HEALTH)
+
 # weapons = weapon(screen, bullets_group)
 player_group.add(player) # add the player to the group
 weapon = Weapon(screen, bullets_group)
+
+# Managing the scoreboard
+font = pygame.font.Font(None, 36)
 
 # create the level manager
 surface = pygame.display.get_surface()
@@ -60,6 +64,8 @@ def main():
     dt = 0
     spawn_timer = 0  # Timer to manage enemy spawns
     spawn_interval = 240
+    killcount = 20
+
     while running:
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
@@ -69,7 +75,7 @@ def main():
 
         for event in pygame.event.get():
 
-            if event.type == pygame.QUIT or (event.type == pygame.K_ESCAPE):
+            if (event.type == pygame.QUIT) or (event.type == pygame.K_ESCAPE):
                 running = False
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -100,10 +106,13 @@ def main():
 
         # fill the screen with a color to wipe away anything from last frame
         # screen.fill("purple")
+        
         screen.blit(bg, (0, 0))
+        
         lvlManager.drawLevel()
 
         key = pygame.key.get_pressed()
+        player.move(key, dt, angle)
     
         bullet_collision = pygame.sprite.groupcollide(bullets_group, enemies_group, False, False)
         for bullet, enemy in bullet_collision.items():
@@ -111,14 +120,30 @@ def main():
             bullet.kill()
             enemy[0].draw_health_bar(screen)
             if enemy[0].current_health <= 0:
-
+                enemies_list.remove(enemy[0])
+                enemies_group.remove(enemy[0])
                 enemy[0].kill()
-    
+                player.score += 1
+                killcount -= 1
+                
+        # if killcount == 0:
+        #     lvlManager.updateLevel()
+        #     killcount = 20
+        #     print("Level Up")
+        
+        enemy_collision = pygame.sprite.spritecollide(player, enemies_group, False)
+        for enemy in enemy_collision:
+            player.curr_health -= enemy.damage
+            
+            player.draw_health_bar()
+            if player.curr_health <= 0:
+                running = False
+                print("You died")
+                break
     
         # Create collisiong checking for the player here
         #collidedWithWallList = lvlManager.detectWallCollisions(spriteGroup)
-        player.move(key, dt, angle)
-    
+
 
         # sprite management
         bullets_group.update()
@@ -126,7 +151,9 @@ def main():
         player.draw_health_bar()
         all_sprites.update()
         all_sprites.draw(screen)
-        bullets_group.update()
+  
+        score_surface = font.render(f"Score: {player.score} | Kills left: {killcount}", True, (255, 255, 255))
+        screen.blit(score_surface, (10, 10))
 
         spawn_timer += 1
         if spawn_timer >= spawn_interval:
@@ -141,24 +168,28 @@ def main():
             else:
                 enemy.move_towards(player.rect.center)
             enemy.draw_health_bar(screen)  # Draw health bar above each enemy
+        
         enemies_group.update(player.rect.center, screen.get_width(), screen.get_height())
         enemies_group.draw(screen)
-        for enemy in enemies_list[:]:  # Iterate over a slice copy of the list to avoid modification issues
-            # Check for defeated enemies
-            if enemy.current_health <= 0:
-                enemies_list.remove(enemy)
-                enemies_group.remove(enemy)
-                enemies_group.update(player.rect.center, screen.get_width(), screen.get_height())
-                enemies_group.draw(screen)
-                continue  # Skip the rest of the loop for this enemy
+        
+        # for enemy in enemies_list[:]:  # Iterate over a slice copy of the list to avoid modification issues
+        #     # Check for defeated enemies
+        #     if enemy.current_health <= 0:
+        #         enemies_list.remove(enemy)
+        #         enemies_group.remove(enemy)
+        #         enemies_group.update(player.rect.center, screen.get_width(), screen.get_height())
+        #         enemies_group.draw(screen)
+        #         continue  # Skip the rest of the loop for this enemy
 
         # flip() the display to put your work on screen
-        pygame.display.flip()
+        if running:
+            pygame.display.flip()
         # limits FPS to 60
         # dt is delta time in seconds since last frame, used for framerate-
         # independent physics.
         dt = clock.tick(60) / 1000
         lvlManager.updateLevel()
+        
 
     pygame.quit()
 
@@ -166,7 +197,8 @@ def start_the_game():
     main()
     return
 
-menu = pygame_menu.Menu('Welcome', 400, 300, theme=pygame_menu.themes.THEME_BLUE)
+menu = pygame_menu.Menu('CLAUSTROPHOBIA: Escape the Martian Ship before time runs out',
+                         1280, 720, theme=pygame_menu.themes.THEME_GREEN)
 menu.add.button('Play', start_the_game)
 menu.add.button('Quit', pygame_menu.events.EXIT)
 menu.mainloop(surface)

@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.max_health = max_health
         self.curr_health = max_health
         self.radius = self.rect.width / 2
+        self.score = 0
         
     # def damage(self, amount):
     #     self.curr_health -= amount

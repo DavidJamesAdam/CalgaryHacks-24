@@ -23,6 +23,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image.get_rect()
         self.width = self.rect.width
         self.height = self.rect.height
+        self.damage = 1
 
 
     def move_towards(self, target_pos):
@@ -71,12 +72,14 @@ class FastEnemy(Enemy):
         super().__init__(start_x, start_y, radius=8, max_health=50, speed=4)
         self.image = pygame.image.load("images/fast_alien.png").convert_alpha()
         self.rect = self.image.get_rect(center=(start_x, start_y))
+        self.damage = 1.5
 
 class StrongEnemy(Enemy):
     def __init__(self, start_x, start_y):
         super().__init__(start_x, start_y, radius=15, max_health=200, speed=1)
         self.image = pygame.image.load("images/strong_alien.png").convert_alpha()
         self.rect = self.image.get_rect(center=(start_x, start_y))
+        self.damage = 2
 
 class TeleportingEnemy(Enemy):
     def __init__(self, start_x, start_y, teleport_interval=300):
@@ -85,6 +88,7 @@ class TeleportingEnemy(Enemy):
         self.frames_until_teleport = teleport_interval
         self.image = pygame.image.load("images/teleport_alien.png").convert_alpha()
         self.rect = self.image.get_rect(center=(start_x, start_y))
+        self.damage = 2
 
     def teleport(self, screen_width, screen_height):
         # Teleport to a random position on the screen, ensuring the enemy does not spawn off-screen
