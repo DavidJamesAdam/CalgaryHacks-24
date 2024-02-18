@@ -101,7 +101,6 @@ def main():
         # fill the screen with a color to wipe away anything from last frame
         # screen.fill("purple")
         screen.blit(bg, (0, 0))
-        lvlManager.drawLevel()
 
         key = pygame.key.get_pressed()
     
@@ -151,6 +150,9 @@ def main():
                 enemies_group.update(player.rect.center, screen.get_width(), screen.get_height())
                 enemies_group.draw(screen)
                 continue  # Skip the rest of the loop for this enemy
+
+        # draw the rest of the level overtop of the enemies & sprites
+        lvlManager.drawLevel()
 
         # flip() the display to put your work on screen
         pygame.display.flip()
