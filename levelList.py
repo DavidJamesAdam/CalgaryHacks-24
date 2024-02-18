@@ -13,10 +13,12 @@ class LevelList:
         level1 = [topWall, rightWall, leftWall, bottomWall]
 
         # level 2
-        
-
+        barheight = 3*wallStartSize
+        rightbar = pygame.Rect((screenSize[0]/4)-(wallStartSize/2),(screenSize[1]/2)-(barheight/2),wallStartSize/2,barheight)
+        leftbar = pygame.Rect((3*screenSize[0]/4)-(wallStartSize/2),(screenSize[1]/2)-(barheight/2),wallStartSize/2,barheight)
+        level2 = [topWall,leftWall,bottomWall,rightWall,rightbar,leftbar]
         # all levels
-        self.levels = [level1]
+        self.levels = [level1,level2]
 
     def numLevels(self) :
         return len(self.levels)
