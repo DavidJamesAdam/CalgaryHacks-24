@@ -2,20 +2,24 @@
 import pygame
 import math
 
+
 from enemies import Enemy, spawn_enemy_at_edge
 from player import Player
 from levelManager import LevelManager
 
 
-
+MAX_HEALTH = 100
+SCREEN_WIDTH = 1920
+SCREEN_HEIGHT = 1080
 
 # pygame setup
 pygame.init()
 bg = pygame.image.load("images/background.jpg")
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 running = True
 dt = 0
+
 
 
 # sprite setup
@@ -27,10 +31,17 @@ traps_group = pygame.sprite.Group() # create a group for the traps
 obstacles_group = pygame.sprite.Group() # create a group for the obstacles
 
 
+
+
+
 # create the player
-player = Player(screen)
+player = Player(screen, MAX_HEALTH)
 # weapons = weapon(screen, bullets_group)
 player_group.add(player) # add the player to the group
+# weapon = Weapon()
+
+
+
 
 # create the level manager
 surface = pygame.display.get_surface()
@@ -46,11 +57,21 @@ collidedWithWallList = []
 all_sprites.add(player) # add the player to the group
 
 
+
+
+
+
 enemies = Enemy(start_x=0, start_y=0)
 
 enemies_list = []  # List to keep track of all enemies
 spawn_timer = 0  # Timer to manage enemy spawns
 spawn_interval = 120
+
+
+
+
+
+
 
 while running:
     # poll for events
@@ -73,6 +94,7 @@ while running:
                 distance = ((enemy.pos[0] - click_pos[0]) ** 2 + (enemy.pos[1] - click_pos[1]) ** 2) ** 0.5
                 if distance < enemy.radius:  # The click is within the enemy's circle
                     enemy.current_health -= 10  # Decrease health by 10
+            # weapon.fire()
 
 
         # elif event.type == pygame.K_q:
@@ -94,8 +116,10 @@ while running:
     player.move(key, dt, angle)
 
     # sprite management
+    player.draw_health_bar()
     all_sprites.update()
     all_sprites.draw(screen)
+    bullets_group.update()
 
     spawn_timer += 1
     if spawn_timer >= spawn_interval:
