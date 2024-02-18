@@ -5,9 +5,7 @@ import math
 from enemies import Enemy, spawn_enemy_at_edge
 from player import Player
 from levelManager import LevelManager
-
-
-
+from weapons import weapon
 
 # pygame setup
 pygame.init()
@@ -25,6 +23,9 @@ enemies_group = pygame.sprite.Group() # create a group for the enemies
 bullets_group = pygame.sprite.Group() # create a group for the bullets
 traps_group = pygame.sprite.Group() # create a group for the traps
 obstacles_group = pygame.sprite.Group() # create a group for the obstacles
+
+#Add weapon
+weapons = weapon(screen, bullets_group)
 
 
 # create the player
@@ -72,6 +73,8 @@ while running:
                     enemy.current_health -= 10  # Decrease health by 10
 
 
+
+
         # elif event.type == pygame.K_q:
         #     player.change_weapon(-1)
         #     weapons.change_weapon(-1)
@@ -85,12 +88,18 @@ while running:
     levManager.drawLevel()
 
     key = pygame.key.get_pressed()
-
+    
+    
+    
+    
     # Create collisiong checking for the player here
     player.move(key, dt, angle)
     #screen.fill("purple")
+    p_x, p_y = player.return_rect()
+    weapons.fire(angle, p_x, p_y, screen)
 
     # sprite management
+    bullets_group.update()
     all_sprites.update()
     all_sprites.draw(screen)
 
