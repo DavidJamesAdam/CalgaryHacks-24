@@ -208,7 +208,7 @@ def start_the_game():
     main()
     return
 
-menu = pygame_menu.Menu('CLAUSTROPHOBIA: Escape the Martian Ship before time runs out',
+menu = pygame_menu.Menu('CLAUSTROPHOBIA: Escape the Martian Landscape before time runs out',
                          1280, 720, theme=pygame_menu.themes.THEME_GREEN)
 menu.add.button('Play', start_the_game)
 menu.add.button('Quit', pygame_menu.events.EXIT)
