@@ -65,8 +65,11 @@ class LevelManager:
             
     # check collisions with level
     def detectWallCollisions(self,spriteGroup):
-        return pygame.sprite.groupcollide(self.wallSpriteGroup,spriteGroup,False,False)
-
+        # dict = pygame.sprite.groupcollide(self.wallSpriteGroup,spriteGroup,False,False)
+        if pygame.sprite.spritecollideany(spriteGroup,self.wallSpriteGroup):
+            return True
+        else:
+            return False  
     def updateLevel(self):
         # updatePx = number of pixels each box will be changed by each frame
         updatePx = self.wallUpdateRate / 2

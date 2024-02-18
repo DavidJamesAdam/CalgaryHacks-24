@@ -131,25 +131,26 @@ def main():
         #     lvlManager.updateLevel()
         #     killcount = 20
         #     print("Level Up")
-        
+                
+                
+        # enemy collision detection
         enemy_collision = pygame.sprite.spritecollide(player, enemies_group, False)
         for enemy in enemy_collision:
             player.curr_health -= enemy.damage
             
-            player.draw_health_bar()
+            
             if player.curr_health <= 0:
                 running = False
                 print("You died")
                 break
                 
+        # Wall collision
+        wall_collisiong = lvlManager.detectWallCollisions(player)
+        if wall_collisiong:
+            player.rect.x = player.old_x
+            player.rect.y = player.old_y
 
-        # wall_collisiong = lvlManager.detectWallCollisions(lvlManager, player)
-        # if wall_collisiong:
-        #     player.rect.x = player.old_x
-        #     player.rect.y = player.old_y
-        #     player.draw_health_bar()
-        # Create collisiong checking for the player here
-        #collidedWithWallList = lvlManager.detectWallCollisions(spriteGroup)
+        
 
 
         # sprite management

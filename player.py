@@ -20,6 +20,8 @@ class Player(pygame.sprite.Sprite):
         self.curr_health = max_health
         self.radius = self.rect.width / 2
         self.score = 0
+        self.old_x = self.rect.x
+        self.old_y = self.rect.y
         
     # def damage(self, amount):
     #     self.curr_health -= amount
@@ -65,6 +67,13 @@ class Player(pygame.sprite.Sprite):
             self.curr_health = 0
         self.draw_health_bar()
 
+    def go_to_old(self):
+        '''
+        Go to the old position of the player.
+        '''
+        self.rect.x = self.old_x
+        self.rect.y = self.old_y
+        self.draw_health_bar()
 
     def return_rect(self):
         '''
@@ -76,14 +85,22 @@ class Player(pygame.sprite.Sprite):
         # Rotate the sprite to the angle
         self.image = pygame.transform.rotate(self.original_image, int(angle))
         self.rect = self.image.get_rect(center=self.rect.center)
+        
 
         if keys[pygame.K_w]:
+            self.old_y = self.rect.y 
             self.rect.y -= 300 * dt
+
         if keys[pygame.K_s]:
+            self.old_y = self.rect.y 
             self.rect.y += 300 * dt
+
         if keys[pygame.K_a]:
+            self.old_x = self.rect.x 
             self.rect.x -= 300 * dt
+
         if keys[pygame.K_d]:
+            self.old_x = self.rect.x 
             self.rect.x += 300 * dt
 
 
