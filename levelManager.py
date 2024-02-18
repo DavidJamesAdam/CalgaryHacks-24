@@ -4,7 +4,7 @@ from levelList import LevelList
 # Level drawing, updating, and collision detection done in this class.
 
 class LevelManager:
-    def __init__(self,surface, wallShade, wallThicc, wallUpdateRate):
+    def __init__(self,surface, wallShade, wallThicc, wallUpdateRate, wallSpriteGroup):
         self.surface = surface
         self.screenSize = surface.get_size()
         self.wallColour = wallShade
@@ -14,16 +14,29 @@ class LevelManager:
         
         # level is made of a series of boxes, each of which can increase/decrease in size, and also a background colour
         self.levelRectangles = []
+        self.wallSprites = []
+        self.wallSpriteGroup = wallSpriteGroup
 
-        #levelList
+        # levelList
         self.lvls = LevelList(self.screenSize,self.wallThickness)
 
+        # wall image
+        self.wallImage = pygame.image.load("images/WallTexture.png")
+
     # loads a level from a set of rectangles
-    def loadLevel(self, rectList):
-        self.levelRectangles = rectList
+    def loadLevelList(self, rectList):
+        self.levelRectangles = rectList.copy()
+
+        for wall in rectList:
+            newSprite = pygame.sprite.Sprite(self.wallSpriteGroup)
+            newSprite.rect = wall
+            self.refitSprite(newSprite)
+            self.wallSprites.append(newSprite)
     # loads a level based on the preset level list
     def loadLevel(self, levelNum):
-        self.levelRectangles = self.lvls.getLevel(levelNum)
+        print(levelNum)
+        rects =self.lvls.getLevel(levelNum)
+        self.loadLevelList(rects)
 
     # adds a rectangle as a wall to the current level
     def addWall(self, wallRect):
@@ -45,18 +58,13 @@ class LevelManager:
 
     # draw the level (its walls)
     def drawLevel(self):
-        for box in self.levelRectangles: #for all boxes in the level
-            pygame.draw.rect(self.surface, self.wallColour, box) #draw the box
-
+        for i in range(len(self.levelRectangles)): #for all boxes in the level
+            #pygame.draw.rect(self.surface, self.wallColour, self.levelRectangles[i]) #draw the box
+            self.surface.blit(self.wallSprites[i].image,self.levelRectangles[i])
+            
     # check collisions with level
-    def detectCollisions(self):
-        return []
-    # takes in object (e.g. enemy, player) location & size as argument
-    # spits out if collision happens as result
-    # check the object vs all the rectangles, quick return if true on any of them
-    # if (obj Right => box Left || obj Leftt <= box Right) && (obj Top => box Bottom || obj Bottom <= box Top)
-    # collision, return true
-    # else next box
+    def detectWallCollisions(self,spriteGroup):
+        return pygame.sprite.groupcollide(self.wallSpriteGroup,spriteGroup,False,False)
 
     def updateLevel(self):
         # updatePx = number of pixels each box will be changed by each frame
@@ -81,7 +89,14 @@ class LevelManager:
         for box in self.levelRectangles:
             resizeWall(box, updatePx)
 
+        for sprite in self.wallSprites:
+            self.refitSprite(sprite)
+
     # later feature to add move the door, maybe other objects if it collides with any of the rectangles, if it does
+
+    def refitSprite(self, sprite):
+        rect = sprite.rect
+        sprite.image = pygame.transform.scale(self.wallImage, (rect.width, rect.height))
 
 #uniformly changes the size of a wall (a rectangle) such that it maintains its centrepoint
 def resizeWall(wall, sizeChange):
