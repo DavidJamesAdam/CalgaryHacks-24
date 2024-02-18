@@ -22,27 +22,32 @@ class LevelManager:
     # loads a level from a set of rectangles
     def loadLevel(self, rectList):
         self.levelRectangles = rectList
-
+    # loads a level based on the preset level list
     def loadLevel(self, levelNum):
         self.levelRectangles = self.lvls.getLevel(levelNum)
 
+    # adds a rectangle as a wall to the current level
     def addWall(self, wallRect):
         if isinstance(wallRect,pygame.Rect):
             self.levelRectangles.append(wallRect)
         else :
             print(wallRect," is not a pygame.Rect! Consider defining it with createWall(left,top,width,height)")
 
+    # creates a new wall for the current level by integer parameters, defined by the top-left corner
     def createWall(self, left, top, width, height):
         newWall = pygame.Rect(left, top, width, height)
-        self.levelRectangles.append(newWall)
+        self.addWall(newWall)
+    # creates a new wall for the current level by integer parameters, defined by the centrepoint
+    def createCentredWall(self, x, y, width, height):
+        left = x - (width/2)
+        top = y - (height/2)
+        newWall = pygame.Rect(left, top, width, height)
+        self.addWall(newWall)
 
-    # draw level
+    # draw the level (its walls)
     def drawLevel(self):
-        for box in self.levelRectangles:
-            pygame.draw.rect(self.surface, self.wallColour, box)
-
-    # for all boxes in level
-    # draw the box
+        for box in self.levelRectangles: #for all boxes in the level
+            pygame.draw.rect(self.surface, self.wallColour, box) #draw the box
 
     # check collisions with level
     def detectCollisions(self):
@@ -55,25 +60,33 @@ class LevelManager:
     # else next box
 
     def updateLevel(self):
+        # updatePx = number of pixels each box will be changed by each frame
         updatePx = self.wallUpdateRate / 2
-        if (updatePx):
+        
+        # if updatePx is too small, then don't update it this frame.
+        # Instead, increment a counter that triggers adding one pixel at a future frame
+        # This makes the average pixel increase/frame be the set wallUpdateRate
+        if ((updatePx < 1) & (updatePx > -1)):
             self.wallUpdateTick += updatePx
             updatePx = 0
 
+        # If the counter gets high enough, trigger adding one pixel to the walls in this frame, and then reset the counter
         if (self.wallUpdateTick > 2):
-            updatePx += 1
+            updatePx = 1
+            self.wallUpdateTick = 0
+        elif (self.wallUpdateTick < -2):
+            updatePx = -1
             self.wallUpdateTick = 0
 
+        # for all boxes in the level
         for box in self.levelRectangles:
-            box.left -= updatePx
-            box.width += updatePx * 2
-            box.top -= updatePx
-            box.height += updatePx * 2
+            resizeWall(box, updatePx)
 
-    # update level
-    # takes in size change
-    # for all boxes in level
-    # change size of boxes by indicated factor (with at least one pixel of width)
-    # later feature to add move the door if it collides with any of the rectangles, if it does
+    # later feature to add move the door, maybe other objects if it collides with any of the rectangles, if it does
 
-
+#uniformly changes the size of a wall (a rectangle) such that it maintains its centrepoint
+def resizeWall(wall, sizeChange):
+    wall.left -= sizeChange
+    wall.width += sizeChange * 2
+    wall.top -= sizeChange
+    wall.height += sizeChange * 2
