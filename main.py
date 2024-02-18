@@ -46,15 +46,15 @@ def main():
 
     collidedWithWallList = []
 
-# add the player to the all_sprites group
-all_sprites.add(player) # add the player to the group
+    # add the player to the all_sprites group
+    all_sprites.add(player) # add the player to the group
 
 
-enemies = Enemy(start_x=0, start_y=0)
+    enemies = Enemy(start_x=0, start_y=0)
 
-enemies_list = []  # List to keep track of all enemies
-spawn_timer = 0  # Timer to manage enemy spawns
-spawn_interval = 240
+    enemies_list = []  # List to keep track of all enemies
+    spawn_timer = 0  # Timer to manage enemy spawns
+    spawn_interval = 240
 
     while running:
         # poll for events
@@ -104,35 +104,34 @@ spawn_interval = 240
         all_sprites.draw(screen)
         bullets_group.update()
 
-    spawn_timer += 1
-    if spawn_timer >= spawn_interval:
-        spawn_timer = 0
-        new_enemy = spawn_enemy_at_edge(screen.get_width(), screen.get_height(), enemies.radius)
-        enemies_list.append(new_enemy)
-    for enemy in enemies_list:
-        if hasattr(enemy, 'update'):
-            enemy.update(player.rect.center, screen.get_width(), screen.get_height())
-        else:
-            enemy.move_towards(player.rect.center)
-        enemy.draw(screen)  # Draw enemy as a circle
-        enemy.draw_health_bar(screen)  # Draw health bar above each enemy
-    for enemy in enemies_list[:]:  # Iterate over a slice copy of the list to avoid modification issues
-        # Check for defeated enemies
-        if enemy.current_health <= 0:
-            enemies_list.remove(enemy)
-            continue  # Skip the rest of the loop for this enemy
+        spawn_timer += 1
+        if spawn_timer >= spawn_interval:
+            spawn_timer = 0
+            new_enemy = spawn_enemy_at_edge(screen.get_width(), screen.get_height(), enemies.radius)
+            enemies_list.append(new_enemy)
+        for enemy in enemies_list:
+            if hasattr(enemy, 'update'):
+                enemy.update(player.rect.center, screen.get_width(), screen.get_height())
+            else:
+                enemy.move_towards(player.rect.center)
+            enemy.draw(screen)  # Draw enemy as a circle
+            enemy.draw_health_bar(screen)  # Draw health bar above each enemy
+        for enemy in enemies_list[:]:  # Iterate over a slice copy of the list to avoid modification issues
+            # Check for defeated enemies
+            if enemy.current_health <= 0:
+                enemies_list.remove(enemy)
+                continue  # Skip the rest of the loop for this enemy
 
-        # flip() the display to put your work on screen
-        pygame.display.flip()
+            # flip() the display to put your work on screen
+            pygame.display.flip()
 
-        # limits FPS to 60
-        # dt is delta time in seconds since last frame, used for framerate-
-        # independent physics.
-        dt = clock.tick(60) / 1000
+            # limits FPS to 60
+            # dt is delta time in seconds since last frame, used for framerate-
+            # independent physics.
+            dt = clock.tick(60) / 1000
 
-        lvlManager.updateLevel()
+            lvlManager.updateLevel()
 
     pygame.quit()
 
 main()
-
