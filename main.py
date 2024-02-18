@@ -73,7 +73,7 @@ def reset_game():
     wallColour = pygame.Color(0,0,0)
     wallStartThickness = 50
     wallUpdateRate = 0.1
-    lvlManager = LevelManager(surface, wallColour, wallStartThickness, wallUpdateRate, wall_group)
+    lvlManager = LevelManager(surface, wallColour, wallStartThickness, wallUpdateRate, wall_group, player)
     lvlManager.loadLevel(0)
 
     collidedWithWallList = []
@@ -133,7 +133,7 @@ def main():
         lvlManager.drawLevel()
         key = pygame.key.get_pressed()
         player.move(key, dt, angle)
-        bullet_collision = pygame.sprite.groupcollide(bullets_group, enemies_group, False, False)
+        bullet_collision = pygame.sprite.groupcollide(bullets_group, enemies_group, False, False, pygame.sprite.collide_mask)
 
         for bullet, enemy in bullet_collision.items():
             enemy[0].current_health -= bullet.damage
@@ -152,7 +152,7 @@ def main():
         #     print("Level Up")
                  
         # enemy collision detection
-        enemy_collision = pygame.sprite.spritecollide(player, enemies_group, False)
+        enemy_collision = pygame.sprite.spritecollide(player, enemies_group, False, pygame.sprite.collide_mask)
         for enemy in enemy_collision:
             player.curr_health -= enemy.damage
             
@@ -164,10 +164,19 @@ def main():
                 return
                 
         # Wall collision
-        wall_collisiong = lvlManager.detectWallCollisions(player)
-        if wall_collisiong:
-            player.rect.x = player.old_x
-            player.rect.y = player.old_y
+        lvlManager.detectWallCollisions()
+        # if collision:
+        #     # Determine the direction of the collision
+        #     dx = player.rect.centerx - collided_wall.rect.centerx
+        #     dy = player.rect.centery - collided_wall.rect.centery
+
+        #     # Normalize the direction vector
+        #     dist = math.hypot(dx, dy)
+        #     dx, dy = dx / dist, dy / dist
+
+        #     # Move the player away from the wall
+        #     player.rect.x += dx * 10
+        #     player.rect.y += dy * 10
 
         # sprite management
         bullets_group.update()
