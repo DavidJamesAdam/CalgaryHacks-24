@@ -68,7 +68,7 @@ def main():
 
         for event in pygame.event.get():
 
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or (event.type == pygame.K_ESCAPE):
                 running = False
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -131,7 +131,7 @@ def main():
         if spawn_timer >= spawn_interval:
             spawn_timer = 0
             # new_enemy = spawn_enemy_at_edge(screen.get_width(), screen.get_height(), enemies.radius)
-            new_enemy = spawn_enemy_at_edge(lvlManager.levelRectangles, screen.get_height(), enemies.radius)
+            new_enemy = spawn_enemy_at_edge(screen.get_width(), screen.get_height(), enemies.radius)
             enemies_group.add(new_enemy)
             enemies_list.append(new_enemy)
         for enemy in enemies_list:
