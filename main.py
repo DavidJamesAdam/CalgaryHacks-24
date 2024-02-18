@@ -108,13 +108,14 @@ def main():
         if spawn_timer >= spawn_interval:
             spawn_timer = 0
             new_enemy = spawn_enemy_at_edge(screen.get_width(), screen.get_height(), enemies.radius)
+            # new_enemy = lvlManager.spawn_enemy_within_box()
             enemies_list.append(new_enemy)
         for enemy in enemies_list:
             if hasattr(enemy, 'update'):
                 enemy.update(player.rect.center, screen.get_width(), screen.get_height())
             else:
                 enemy.move_towards(player.rect.center)
-            enemy.draw(screen)  # Draw enemy as a circle
+            enemy.draw(screen) 
             enemy.draw_health_bar(screen)  # Draw health bar above each enemy
         for enemy in enemies_list[:]:  # Iterate over a slice copy of the list to avoid modification issues
             # Check for defeated enemies

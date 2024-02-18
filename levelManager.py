@@ -1,5 +1,7 @@
 import pygame
 from levelList import LevelList
+import random
+from enemies import Enemy, FastEnemy, StrongEnemy, TeleportingEnemy, RegularEnemy
 # Level design class.
 # Level drawing, updating, and collision detection done in this class.
 
@@ -74,5 +76,21 @@ class LevelManager:
     # for all boxes in level
     # change size of boxes by indicated factor (with at least one pixel of width)
     # later feature to add move the door if it collides with any of the rectangles, if it does
+            
+    # def get_playable_area(self):
+    #     if self.levelRectangles:
+    #         return self.levelRectangles[0]  # Assuming the first rectangle is the playable area
+    #     else:
+    #         return pygame.Rect(0, 0, *self.screenSize)  # Fallback to full screen size
+        
+    # def spawn_enemy_within_box(self):
+    #     playable_area = self.get_playable_area()
+    #     x = random.randint(playable_area.left, playable_area.right)
+    #     y = random.randint(playable_area.top, playable_area.bottom)
+
+    #     # Adjust x and y based on enemy size if necessary
+    #     enemy_type = random.choice([FastEnemy, StrongEnemy, RegularEnemy, TeleportingEnemy])
+    #     return enemy_type(x, y)  # Assuming Enemy is accessible here
+
 
 
