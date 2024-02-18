@@ -9,14 +9,20 @@ from pygame.locals import *
 import pygame
 import random
 
-class Enemy:
-    def __init__(self, start_x, start_y, radius = 10, max_health = 100, speed = 2, colour = (255, 0, 0)):
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, start_x, start_y, radius = 10, max_health = 100, speed = 2):
+        pygame.sprite.Sprite.__init__(self)
         self.pos = [start_x, start_y]
         self.speed = speed
         self.radius = radius
         self.max_health = max_health
         self.current_health = max_health
-        self.colour = colour
+        self.original_image = pygame.image.load("images/regular_alien.png").convert_alpha()
+        self.image = self.original_image
+        self.rect = self.image.get_rect(center=(start_x, start_y))
+        self.image.get_rect()
+        self.width = self.rect.width
+        self.height = self.rect.height
 
 
     def move_towards(self, target_pos):
@@ -31,6 +37,8 @@ class Enemy:
         # Move enemy
         self.pos[0] += direction[0] * self.speed
         self.pos[1] += direction[1] * self.speed
+
+        self.rect.center = (self.pos[0], self.pos[1])
 
     def draw_health_bar(self, screen):
         # Health bar settings
@@ -47,21 +55,54 @@ class Enemy:
         pygame.draw.rect(screen, (255, 0, 0), health_rect)
 
     def draw(self, screen):
-        pygame.draw.circle(screen, self.colour, self.pos, self.radius)
+        screen.blit(self.image, self.rect)  # Draw the sprite at its current position
         self.draw_health_bar(screen)
 
-class FastEnemy(Enemy):
-    def __init__(self, start_x, start_y):
-        super().__init__(start_x, start_y, radius=8, max_health=50, speed=4, colour=(0, 255, 0))
-
-
-class StrongEnemy(Enemy):
-    def __init__(self, start_x, start_y):
-        super().__init__(start_x, start_y, radius=15, max_health=200, speed=1, colour=(0, 0, 255))
 
 class RegularEnemy(Enemy):
      def __init__(self, start_x, start_y):
-        super().__init__(start_x, start_y, radius=15, max_health=100, speed=2, colour=(255, 0, 0))
+        super().__init__(start_x, start_y, radius=15, max_health=100, speed=2)
+        self.image = pygame.image.load("images/regular_alien.png").convert_alpha()
+        self.rect = self.image.get_rect(center=(start_x, start_y))
+        
+
+class FastEnemy(Enemy):
+    def __init__(self, start_x, start_y):
+        super().__init__(start_x, start_y, radius=8, max_health=50, speed=4)
+        self.image = pygame.image.load("images/fast_alien.png").convert_alpha()
+        self.rect = self.image.get_rect(center=(start_x, start_y))
+
+class StrongEnemy(Enemy):
+    def __init__(self, start_x, start_y):
+        super().__init__(start_x, start_y, radius=15, max_health=200, speed=1)
+        self.image = pygame.image.load("images/strong_alien.png").convert_alpha()
+        self.rect = self.image.get_rect(center=(start_x, start_y))
+
+class TeleportingEnemy(Enemy):
+    def __init__(self, start_x, start_y, teleport_interval=300):
+        super().__init__(start_x, start_y, radius=12, max_health=80, speed=0)
+        self.teleport_interval = teleport_interval  # Frames until next teleport
+        self.frames_until_teleport = teleport_interval
+        self.image = pygame.image.load("images/teleport_alien.png").convert_alpha()
+        self.rect = self.image.get_rect(center=(start_x, start_y))
+
+    def teleport(self, screen_width, screen_height):
+        # Teleport to a random position on the screen, ensuring the enemy does not spawn off-screen
+        self.pos = [random.randint(self.radius, screen_width - self.radius),
+                    random.randint(self.radius, screen_height - self.radius)]
+
+    def update_teleport(self, player_pos, screen_width, screen_height):
+        # Decrement the teleport timer
+        self.frames_until_teleport -= 1
+
+        if self.frames_until_teleport <= 0:
+            self.teleport(screen_width, screen_height)
+            self.frames_until_teleport = self.teleport_interval  # Reset the teleport timer
+
+        # Continue with any other updates, e.g., moving towards the player
+        self.move_towards(player_pos)
+
+        
 
 
 def spawn_enemy_at_edge(screen_width, screen_height, enemy_radius):
@@ -80,5 +121,5 @@ def spawn_enemy_at_edge(screen_width, screen_height, enemy_radius):
     if edge == 'bottom':
         y -= enemy_radius * 2
     
-    enemy_type = random.choice([FastEnemy, StrongEnemy, RegularEnemy])
+    enemy_type = random.choice([FastEnemy, StrongEnemy, RegularEnemy, TeleportingEnemy])
     return enemy_type(x, y)
