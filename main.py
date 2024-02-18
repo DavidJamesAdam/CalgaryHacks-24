@@ -12,51 +12,78 @@ MAX_HEALTH = 100
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 
+# Global data
+bg = None
+screen = None
+clock = None
+all_sprites = None
+player_group = None
+enemies_group = None
+bullets_group = None
+traps_group = None
+obstacles_group = None
+wall_group = None
+player = None
+weapon = None
+font = None
+surface = None
+wallColour = None
+wallStartThickness = None
+wallUpdateRate = None
+lvlManager = None
+collidedWithWallList = None
+enemies = None
+enemies_list = None
 
-# pygame setup
-pygame.init()
-bg = pygame.image.load("images/background.jpg")
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-clock = pygame.time.Clock()
-# running = True
-# dt = 0
 
-# sprite setup
-all_sprites = pygame.sprite.Group() # create a group for all sprites (except walls)
-player_group = pygame.sprite.Group() # create a group for the player
-enemies_group = pygame.sprite.Group() # create a group for the enemies
-bullets_group = pygame.sprite.Group() # create a group for the bullets
-traps_group = pygame.sprite.Group() # create a group for the traps
-obstacles_group = pygame.sprite.Group() # create a group for the obstacles
-wall_group = pygame.sprite.Group() # create a group for walls
+def reset_game():
+    global bg, screen, clock, all_sprites, player_group, enemies_group, bullets_group, traps_group, obstacles_group, wall_group
+    global player, weapon, font, surface, wallColour, wallStartThickness, wallUpdateRate, lvlManager, collidedWithWallList, enemies, enemies_list
+
+    # pygame setup
+    pygame.init()
+    bg = pygame.image.load("images/background.jpg")
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
+    # running = True
+    # dt = 0
+
+    # sprite setup
+    all_sprites = pygame.sprite.Group() # create a group for all sprites (except walls)
+    player_group = pygame.sprite.Group() # create a group for the player
+    enemies_group = pygame.sprite.Group() # create a group for the enemies
+    bullets_group = pygame.sprite.Group() # create a group for the bullets
+    traps_group = pygame.sprite.Group() # create a group for the traps
+    obstacles_group = pygame.sprite.Group() # create a group for the obstacles
+    wall_group = pygame.sprite.Group() # create a group for walls
 
 
-# create the player
-player = Player(screen, MAX_HEALTH)
+    # create the player
+    player = Player(screen, MAX_HEALTH)
 
-# weapons = weapon(screen, bullets_group)
-player_group.add(player) # add the player to the group
-weapon = Weapon(screen, bullets_group)
+    # weapons = weapon(screen, bullets_group)
+    player_group.add(player) # add the player to the group
+    weapon = Weapon(screen, bullets_group)
 
-# Managing the scoreboard
-font = pygame.font.Font(None, 36)
+    # Managing the scoreboard
+    font = pygame.font.Font(None, 36)
 
-# create the level manager
-surface = pygame.display.get_surface()
-wallColour = pygame.Color(0,0,0)
-wallStartThickness = 50
-wallUpdateRate = 0.1
-lvlManager = LevelManager(surface, wallColour, wallStartThickness, wallUpdateRate, wall_group)
-lvlManager.loadLevel(0)
+    # create the level manager
+    surface = pygame.display.get_surface()
+    wallColour = pygame.Color(0,0,0)
+    wallStartThickness = 50
+    wallUpdateRate = 0.1
+    lvlManager = LevelManager(surface, wallColour, wallStartThickness, wallUpdateRate, wall_group)
+    lvlManager.loadLevel(0)
 
-collidedWithWallList = []
+    collidedWithWallList = []
 
-# add the player to the all_sprites group
-all_sprites.add(player) # add the player to the group
-enemies = Enemy(start_x=0, start_y=0)
-enemies_list = []  # List to keep track of all enemies
-# spawn_timer = 0  # Timer to manage enemy spawns
-# spawn_interval = 240
+    # add the player to the all_sprites group
+    all_sprites.add(player) # add the player to the group
+    enemies = Enemy(start_x=0, start_y=0)
+    enemies_list = []  # List to keep track of all enemies
+    # spawn_timer = 0  # Timer to manage enemy spawns
+    # spawn_interval = 240
 
 
 def main():
@@ -92,11 +119,6 @@ def main():
                         enemy.current_health -= 10  # Decrease health by 10
                 # weapon.fire()
 
-
-
-
-
-
             # elif event.type == pygame.K_q:
             #     player.change_weapon(-1)
             #     weapons.change_weapon(-1)
@@ -108,14 +130,11 @@ def main():
         # screen.fill("purple")
         
         screen.blit(bg, (0, 0))
-        
         lvlManager.drawLevel()
-
-
         key = pygame.key.get_pressed()
         player.move(key, dt, angle)
-    
         bullet_collision = pygame.sprite.groupcollide(bullets_group, enemies_group, False, False)
+
         for bullet, enemy in bullet_collision.items():
             enemy[0].current_health -= bullet.damage
             bullet.kill()
@@ -131,8 +150,7 @@ def main():
         #     lvlManager.updateLevel()
         #     killcount = 20
         #     print("Level Up")
-                
-                
+                 
         # enemy collision detection
         enemy_collision = pygame.sprite.spritecollide(player, enemies_group, False)
         for enemy in enemy_collision:
@@ -142,7 +160,8 @@ def main():
             if player.curr_health <= 0:
                 running = False
                 print("You died")
-                break
+                reset_game()
+                return
                 
         # Wall collision
         wall_collisiong = lvlManager.detectWallCollisions(player)
@@ -150,17 +169,12 @@ def main():
             player.rect.x = player.old_x
             player.rect.y = player.old_y
 
-        
-
-
         # sprite management
         bullets_group.update()
         bullets_group.draw(screen)
         player.draw_health_bar()
         all_sprites.update()
         all_sprites.draw(screen)
-  
-        
 
         spawn_timer += 1
         if spawn_timer >= spawn_interval:
@@ -202,15 +216,17 @@ def main():
         dt = clock.tick(60) / 1000
         lvlManager.updateLevel()
         
-
     pygame.quit()
 
 def start_the_game():
     main()
     return
 
-menu = pygame_menu.Menu('CLAUSTROPHOBIA: Escape the Martian Landscape before time runs out',
-                         1280, 720, theme=pygame_menu.themes.THEME_GREEN)
-menu.add.button('Play', start_the_game)
-menu.add.button('Quit', pygame_menu.events.EXIT)
-menu.mainloop(surface)
+def display_menu():
+    menu = pygame_menu.Menu('CLAUSTROPHOBIA: Escape the Martian Ship before time runs out', 1280, 720, theme=pygame_menu.themes.THEME_GREEN)
+    menu.add.button('Play', start_the_game)
+    menu.add.button('Quit', pygame_menu.events.EXIT)
+    menu.mainloop(surface)
+
+reset_game()
+display_menu()
