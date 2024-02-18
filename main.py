@@ -6,9 +6,6 @@ from enemies import Enemy, spawn_enemy_at_edge
 from player import Player
 from levelManager import LevelManager
 
-
-
-
 # pygame setup
 pygame.init()
 bg = pygame.image.load("images/background.jpg")
@@ -16,7 +13,6 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
-
 
 # sprite setup
 all_sprites = pygame.sprite.Group() # create a group for all sprites
