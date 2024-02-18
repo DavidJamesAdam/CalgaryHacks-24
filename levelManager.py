@@ -107,7 +107,7 @@ class LevelManager:
         for sprite in self.wallSprites:
             self.refitSprite(sprite)
 
-        self.portal.updatePortal()
+        # self.portal.updatePortal()
 
     # check collisions with walls and character.
     # if there is a collision with a wall, move character away from wall
