@@ -6,7 +6,7 @@ class Bullet(pygame.sprite.Sprite):
     def __init__(self, angle, p_x, p_y, screen):
         super().__init__()
         self.screen = screen
-        self.image = pygame.image.load("images/bullet.png")  # Example bullet size
+        self.image = pygame.image.load("images/bullet_dark.png")  # Example bullet size
         self.rect = self.image.get_rect()
         self.image = pygame.transform.rotate(self.image, int(angle))
         self.rect = self.image.get_rect(center=self.rect.center)
