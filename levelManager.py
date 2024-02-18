@@ -1,5 +1,7 @@
 import pygame
 from levelList import LevelList
+import random
+from enemies import Enemy, FastEnemy, StrongEnemy, TeleportingEnemy, RegularEnemy
 # Level design class.
 # Level drawing, updating, and collision detection done in this class.
 
