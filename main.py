@@ -35,6 +35,7 @@ lvlManager = None
 collidedWithWallList = None
 enemies = None
 enemies_list = None
+currentLevel = None
 
 
 def reset_game():
@@ -95,6 +96,8 @@ def main():
     spawn_timer = 0  # Timer to manage enemy spawns
     spawn_interval = 240
     killcount = 20
+    
+    currentLevel = 0
 
     while running:
         # poll for events
@@ -116,10 +119,10 @@ def main():
                 weapon.fire(angle, p_x, p_y, screen)
 
                 # Check each enemy to see if it was clicked
-                for enemy in enemies_list:
-                    distance = ((enemy.pos[0] - click_pos[0]) ** 2 + (enemy.pos[1] - click_pos[1]) ** 2) ** 0.5
-                    if distance < enemy.radius:  # The click is within the enemy's circle
-                        enemy.current_health -= 10  # Decrease health by 10
+                # for enemy in enemies_list:
+                #     distance = ((enemy.pos[0] - click_pos[0]) ** 2 + (enemy.pos[1] - click_pos[1]) ** 2) ** 0.5
+                #     if distance < enemy.radius:  # The click is within the enemy's circle
+                #         enemy.current_health -= 10  # Decrease health by 10
                 # weapon.fire()
 
             # elif event.type == pygame.K_q:
@@ -228,16 +231,16 @@ def main():
         dt = clock.tick(60) / 1000
         lvlManager.updateLevel()
 
-        # go to next level
-        if (lvlManager.portal.playerCollidesWithPortal):
-            if (currentLevel < lvlManager.lvls.numLevels()):
-                currentLevel += 1
-            else:
-                currentLevel = 0
+        # # go to next level
+        # if (lvlManager.portal.playerCollidesWithPortal):
+        #     if (currentLevel < lvlManager.lvls.numLevels()):
+        #         currentLevel += 1
+        #     else:
+        #         currentLevel = 0
 
-            lvlManager.loadLevel(currentLevel)
-            player.score = 0
-            lvlManager.portal.deactivatePortal()    
+        #     lvlManager.loadLevel(currentLevel)
+        #     player.score = 0
+        #     lvlManager.portal.deactivatePortal()    
         
     pygame.quit()
 
@@ -247,6 +250,9 @@ def start_the_game():
 
 def display_menu():
     menu = pygame_menu.Menu('CLAUSTROPHOBIA: Escape the Martian Ship before time runs out', 1280, 720, theme=pygame_menu.themes.THEME_GREEN)
+    menu.add.label('Lil\' Wayne the Martian has been kidnapped by evil aliens.', font_color='black')
+    menu.add.label('Dropped off on an alien landscape he must survive the onslaught', font_color='black')
+    menu.add.label('of hostile aliens and the encroaching sentient landscape.', font_color='black')
     menu.add.button('Play', start_the_game)
     menu.add.button('Quit', pygame_menu.events.EXIT)
     menu.mainloop(surface)

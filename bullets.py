@@ -22,6 +22,8 @@ class Bullet(pygame.sprite.Sprite):
         self.velocity_y = -(self.speed * math.sin(math.radians(self.angle)))
         self.damage = 25
         
+        self.update()
+
 
     def update(self):
         
