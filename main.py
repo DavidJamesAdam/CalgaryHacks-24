@@ -6,7 +6,7 @@ import math
 from enemies import Enemy, spawn_enemy_at_edge
 from player import Player
 from levelManager import LevelManager
-from weapons import weapon
+from weapons import Weapon
 
 MAX_HEALTH = 100
 SCREEN_WIDTH = 1280
@@ -35,7 +35,7 @@ def main():
     player = Player(screen, MAX_HEALTH)
     # weapons = weapon(screen, bullets_group)
     player_group.add(player) # add the player to the group
-    # weapon = Weapon()
+    weapon = Weapon(screen, bullets_group)
 
     # create the level manager
     surface = pygame.display.get_surface()
@@ -71,7 +71,7 @@ def main():
                 click_pos = pygame.mouse.get_pos()
                 p_x, p_y = player.return_rect()
                 print(angle)
-                weapons.fire(angle, p_x, p_y, screen)
+                weapon.fire(angle, p_x, p_y, screen)
 
                 # Check each enemy to see if it was clicked
                 for enemy in enemies_list:
@@ -99,7 +99,14 @@ def main():
 
         key = pygame.key.get_pressed()
     
-    
+        bullet_collision = pygame.sprite.groupcollide(bullets_group, enemies_group, False, False)
+        for bullet, enemy in bullet_collision.items():
+            enemy[0].current_health -= bullet.damage()
+            bullet.kill()
+            enemy[0].draw_health_bar(screen)
+            if enemy[0].current_health <= 0:
+
+                enemy[0].kill()
     
     
         # Create collisiong checking for the player here

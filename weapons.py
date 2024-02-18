@@ -2,7 +2,7 @@ from player import Player
 from bullets import Bullet
 import pygame
 
-class weapon(pygame.sprite.Group):
+class Weapon(pygame.sprite.Group):
     def __init__(self, screen, bullet_group):
         pygame.sprite.Sprite.__init__(self)
         self.screen = screen
@@ -10,6 +10,8 @@ class weapon(pygame.sprite.Group):
         self.rect = self.image.get_rect()
         self.bullet_group = bullet_group
         self.bullets = []
+
+
     def change_weapon(self, weapon):
         self.image = pygame.image.load(weapon)
         
@@ -20,4 +22,4 @@ class weapon(pygame.sprite.Group):
         bullet = Bullet(angle, p_x, p_y, screen)
         self.bullets.append(bullet)
         self.bullet_group.add(bullet)
-        print("I fired")
+        # print("I fired")
