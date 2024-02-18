@@ -37,11 +37,12 @@ enemies = None
 enemies_list = None
 currentLevel = None
 currentLevel = None
+gun_sound = None
 
 
 def reset_game():
     global bg, screen, clock, all_sprites, player_group, enemies_group, bullets_group, traps_group, obstacles_group, wall_group
-    global player, weapon, font, surface, wallColour, wallStartThickness, wallUpdateRate, lvlManager, collidedWithWallList, enemies, enemies_list, currentLevel
+    global player, weapon, font, surface, wallColour, wallStartThickness, wallUpdateRate, lvlManager, collidedWithWallList, enemies, enemies_list, currentLevel, gun_sound
 
     # pygame setup
     pygame.init()
@@ -87,8 +88,8 @@ def reset_game():
     all_sprites.add(player) # add the player to the group
     enemies = Enemy(start_x=0, start_y=0)
     enemies_list = []  # List to keep track of all enemies
-    # spawn_timer = 0  # Timer to manage enemy spawns
-    # spawn_interval = 240
+
+    gun_sound = pygame.mixer.Sound("audio/gunshot.mp3")
 
 
 def main():
@@ -96,7 +97,7 @@ def main():
     dt = 0
     spawn_timer = 0  # Timer to manage enemy spawns
     spawn_interval = 120
-    killcount = 20
+    killcount = 50
     currentLevel = 0
 
     while running:
@@ -117,19 +118,10 @@ def main():
                 p_x, p_y = player.return_rect()
                 # print(angle)
                 weapon.fire(angle, p_x, p_y, screen)
+                gun_sound.play()
 
-                # weapon.fire()
-
-            # elif event.type == pygame.K_q:
-            #     player.change_weapon(-1)
-            #     weapons.change_weapon(-1)
-            # elif event.type == pygame.K_e:
-            #     player.change_weapon(1)
-            #     weapons.change_weapon(1)
 
         # fill the screen with a color to wipe away anything from last frame
-        # screen.fill("purple")
-        
         screen.blit(bg, (0, 0))
         lvlManager.drawLevel()
         key = pygame.key.get_pressed()
@@ -147,10 +139,9 @@ def main():
                 player.score += 1
                 killcount -= 1
                 
-        # if killcount == 0:
-        #     lvlManager.updateLevel()
-        #     killcount = 20
-        #     print("Level Up")
+        if killcount == 0:
+            reset_game()
+            return
                  
         # enemy collision detection
         enemy_collision = pygame.sprite.spritecollide(player, enemies_group, False, pygame.sprite.collide_mask)
@@ -166,18 +157,6 @@ def main():
                 
         # Wall collision
         lvlManager.detectWallCollisions()
-        # if collision:
-        #     # Determine the direction of the collision
-        #     dx = player.rect.centerx - collided_wall.rect.centerx
-        #     dy = player.rect.centery - collided_wall.rect.centery
-
-        #     # Normalize the direction vector
-        #     dist = math.hypot(dx, dy)
-        #     dx, dy = dx / dist, dy / dist
-
-        #     # Move the player away from the wall
-        #     player.rect.x += dx * 10
-        #     player.rect.y += dy * 10
 
         # sprite management
         bullets_group.update()
@@ -202,40 +181,12 @@ def main():
         
         enemies_group.update(player.rect.center, screen.get_width(), screen.get_height())
         enemies_group.draw(screen)
-        
-        # for enemy in enemies_list[:]:  # Iterate over a slice copy of the list to avoid modification issues
-        #     # Check for defeated enemies
-        #     if enemy.current_health <= 0:
-        #         enemies_list.remove(enemy)
-        #         enemies_group.remove(enemy)
-        #         enemies_group.update(player.rect.center, screen.get_width(), screen.get_height())
-        #         enemies_group.draw(screen)
-        #         continue  # Skip the rest of the loop for this enemy
 
         # draw the rest of the level overtop of the enemies & sprites
         lvlManager.drawLevel()
         
         score_surface = font.render(f"Score: {player.score} | Kills left: {killcount}", True, (255, 255, 255))
-        screen.blit(score_surface, (10, 10))
-        # flip() the display to put your work on screen
-        # if running:
-        #     pygame.display.flip()
-        # # limits FPS to 60
-        # # dt is delta time in seconds since last frame, used for framerate-
-        # # independent physics.
-        # dt = clock.tick(60) / 1000
-        # lvlManager.updateLevel()
-
-        # go to next level
-        # if (lvlManager.portal.playerCollidesWithPortal):
-        #     if (currentLevel < lvlManager.lvls.numLevels()):
-        #         currentLevel += 1
-        #     else:
-        #         currentLevel = 0
-
-        #     lvlManager.loadLevel(currentLevel)
-        #     player.score = 0
-        #     lvlManager.portal.deactivatePortal()    
+        screen.blit(score_surface, (10, 10)) 
 
         if running:
             pygame.display.flip()
@@ -243,23 +194,16 @@ def main():
         # dt is delta time in seconds since last frame, used for framerate-
         # independent physics.
         dt = clock.tick(60) / 1000
-        lvlManager.updateLevel()
-
-        # # go to next level
-        # if (lvlManager.portal.playerCollidesWithPortal):
-        #     if (currentLevel < lvlManager.lvls.numLevels()):
-        #         currentLevel += 1
-        #     else:
-        #         currentLevel = 0
-
-        #     lvlManager.loadLevel(currentLevel)
-        #     player.score = 0
-        #     lvlManager.portal.deactivatePortal()    
+        lvlManager.updateLevel()   
         
     pygame.quit()
 
 def start_the_game():
+    pygame.mixer.music.load("audio/red_star.mp3")
+    pygame.mixer.music.play(0)
     main()
+    pygame.mixer.music.unload()
+    pygame.mixer.music.stop()
     return
 
 def display_menu():
