@@ -24,7 +24,16 @@ class LevelManager:
 
     def loadLevel(self, levelNum):
         self.levelRectangles = self.lvls.getLevel(levelNum)
-            
+
+    def addWall(self, wallRect):
+        if isinstance(wallRect,pygame.Rect):
+            self.levelRectangles.append(wallRect)
+        else :
+            print(wallRect," is not a pygame.Rect! Consider defining it with createWall(left,top,width,height)")
+
+    def createWall(self, left, top, width, height):
+        newWall = pygame.Rect(left, top, width, height)
+        self.levelRectangles.append(newWall)
 
     # draw level
     def drawLevel(self):
