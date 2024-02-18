@@ -65,6 +65,9 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # Get the position of the mouse click
             click_pos = pygame.mouse.get_pos()
+            p_x, p_y = player.return_rect()
+            print(angle)
+            weapons.fire(angle, p_x, p_y, screen)
 
             # Check each enemy to see if it was clicked
             for enemy in enemies_list:
@@ -95,11 +98,11 @@ while running:
     # Create collisiong checking for the player here
     player.move(key, dt, angle)
     #screen.fill("purple")
-    p_x, p_y = player.return_rect()
-    weapons.fire(angle, p_x, p_y, screen)
+    
 
     # sprite management
     bullets_group.update()
+    bullets_group.draw(screen)
     all_sprites.update()
     all_sprites.draw(screen)
 
