@@ -5,18 +5,23 @@ class Bullet(pygame.sprite.Sprite):
     
     def __init__(self, angle, p_x, p_y, screen):
         super().__init__()
+        self.screen = screen
         self.image = pygame.image.load("images/bullet.png")  # Example bullet size
         self.rect = self.image.get_rect()
-        self.screen = screen
+        self.image = pygame.transform.rotate(self.image, int(angle))
+        self.rect = self.image.get_rect(center=self.rect.center)
+
+        
         self.rect.x = p_x
         self.rect.y = p_y
         self.angle = angle
+        
         #Update location of bullet based on angle and dy and dx
         self.speed = 2
         self.velocity_x = self.speed * math.cos(math.radians(self.angle))
         self.velocity_y = -(self.speed * math.sin(math.radians(self.angle)))
         self.damage = 50
-
+        
 
     def update(self):
         
