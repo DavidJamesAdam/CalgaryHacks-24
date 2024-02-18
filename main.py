@@ -53,6 +53,9 @@ enemies_list = []  # List to keep track of all enemies
 # spawn_timer = 0  # Timer to manage enemy spawns
 # spawn_interval = 240
 
+REGULAR_ENEMY_WIDTH = 64  # Width of the RegularEnemy sprite
+REGULAR_ENEMY_HEIGHT = 64  # Height of the RegularEnemy sprite
+
 
 def main():
     running = True
@@ -130,8 +133,8 @@ def main():
         spawn_timer += 1
         if spawn_timer >= spawn_interval:
             spawn_timer = 0
-            # new_enemy = spawn_enemy_at_edge(screen.get_width(), screen.get_height(), enemies.radius)
-            new_enemy = spawn_enemy_at_edge(lvlManager.levelRectangles, screen.get_height(), enemies.radius)
+            new_enemy = spawn_enemy_at_edge(screen.get_width(), screen.get_height(), enemies.radius)
+            # new_enemy = lvlManager.spawn_enemy_within_playable_area(REGULAR_ENEMY_WIDTH, REGULAR_ENEMY_HEIGHT)
             enemies_group.add(new_enemy)
             enemies_list.append(new_enemy)
         for enemy in enemies_list:
