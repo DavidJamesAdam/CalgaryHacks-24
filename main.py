@@ -36,8 +36,11 @@ player_group.add(player) # add the player to the group
 surface = pygame.display.get_surface()
 wallColour = pygame.Color(0,0,0)
 wallStartThickness = 50
-levManager = LevelManager(surface, wallColour, wallStartThickness)
-levManager.loadLevel(0)
+wallUpdateRate = 0.1
+lvlManager = LevelManager(surface, wallColour, wallStartThickness, wallUpdateRate)
+lvlManager.loadLevel(0)
+
+collidedWithWallList = []
 
 # add the player to the all_sprites group
 all_sprites.add(player) # add the player to the group
@@ -82,13 +85,13 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
     screen.blit(bg, (0, 0))
-    levManager.drawLevel()
+    lvlManager.drawLevel()
 
     key = pygame.key.get_pressed()
 
     # Create collisiong checking for the player here
+    collidedWithWallList = lvlManager.detectCollisions()
     player.move(key, dt, angle)
-    #screen.fill("purple")
 
     # sprite management
     all_sprites.update()
@@ -116,6 +119,8 @@ while running:
     # dt is delta time in seconds since last frame, used for framerate-
     # independent physics.
     dt = clock.tick(60) / 1000
+
+    lvlManager.updateLevel()
 
 pygame.quit()
 

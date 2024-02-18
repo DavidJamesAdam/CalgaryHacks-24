@@ -35,6 +35,8 @@ class LevelManager:
     # draw the box
 
     # check collisions with level
+    def detectCollisions():
+        return []
     # takes in object (e.g. enemy, player) location & size as argument
     # spits out if collision happens as result
     # check the object vs all the rectangles, quick return if true on any of them
