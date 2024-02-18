@@ -2,6 +2,7 @@ import pygame
 import math
 from player import Player
 from levelList import LevelList
+from portal import Portal
 
 # Level design class.
 # Level drawing, updating, and collision detection done in this class.
@@ -20,9 +21,13 @@ class LevelManager:
         self.levelRectangles = []
         self.wallSprites = []
         self.wallSpriteGroup = wallSpriteGroup
+        self.levelNumber = -1
 
         # levelList
         self.lvls = LevelList(self.screenSize,self.wallThickness)
+
+        self.portal = 0
+        self.levelMax = 0
 
         # wall image
         self.wallImage = pygame.image.load("images/WallTexture.png")
@@ -38,9 +43,12 @@ class LevelManager:
             self.wallSprites.append(newSprite)
     # loads a level based on the preset level list
     def loadLevel(self, levelNum):
-        print(levelNum)
-        rects =self.lvls.getLevel(levelNum)
+        rects = self.lvls.getLevel(levelNum)
         self.loadLevelList(rects)
+        portalLocation = self.lvls.getPortalLocation(levelNum)
+        self.levelMax = self.lvls.getLevelMax(levelNum)
+        print(self.levelMax)
+        self.portal = Portal(self.surface,self.wallThickness,portalLocation,self.player,self.levelMax)
 
     # adds a rectangle as a wall to the current level
     def addWall(self, wallRect):
@@ -65,6 +73,8 @@ class LevelManager:
         for i in range(len(self.levelRectangles)): #for all boxes in the level
             #pygame.draw.rect(self.surface, self.wallColour, self.levelRectangles[i]) #draw the box
             self.surface.blit(self.wallSprites[i].image,self.levelRectangles[i])
+
+        self.portal.drawPortal()
             
     # check collisions with walls and character.
     # if there is a collision with a wall, move character away from wall
@@ -112,6 +122,8 @@ class LevelManager:
 
         for sprite in self.wallSprites:
             self.refitSprite(sprite)
+
+        self.portal.updatePortal()
 
     # later feature to add move the door, maybe other objects if it collides with any of the rectangles, if it does
 

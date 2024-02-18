@@ -7,6 +7,7 @@ from enemies import Enemy, spawn_enemy_at_edge
 from player import Player
 from levelManager import LevelManager
 from weapons import Weapon
+from portal import Portal
 
 MAX_HEALTH = 100
 SCREEN_WIDTH = 1280
@@ -38,7 +39,7 @@ enemies_list = None
 
 def reset_game():
     global bg, screen, clock, all_sprites, player_group, enemies_group, bullets_group, traps_group, obstacles_group, wall_group
-    global player, weapon, font, surface, wallColour, wallStartThickness, wallUpdateRate, lvlManager, collidedWithWallList, enemies, enemies_list
+    global player, weapon, font, surface, wallColour, wallStartThickness, wallUpdateRate, lvlManager, collidedWithWallList, enemies, enemies_list, currentLevel
 
     # pygame setup
     pygame.init()
@@ -73,8 +74,10 @@ def reset_game():
     wallColour = pygame.Color(0,0,0)
     wallStartThickness = 50
     wallUpdateRate = 0.1
+
+    currentLevel = 0
     lvlManager = LevelManager(surface, wallColour, wallStartThickness, wallUpdateRate, wall_group, player)
-    lvlManager.loadLevel(0)
+    lvlManager.loadLevel(currentLevel)
 
     collidedWithWallList = []
 
@@ -224,6 +227,17 @@ def main():
         # independent physics.
         dt = clock.tick(60) / 1000
         lvlManager.updateLevel()
+
+        # go to next level
+        if (lvlManager.portal.playerCollidesWithPortal):
+            if (currentLevel < lvlManager.lvls.numLevels()):
+                currentLevel += 1
+            else:
+                currentLevel = 0
+
+            lvlManager.loadLevel(currentLevel)
+            player.score = 0
+            lvlManager.portal.deactivatePortal()    
         
     pygame.quit()
 
