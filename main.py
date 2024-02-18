@@ -198,8 +198,10 @@ def main():
         lvlManager.updateLevel()   
         
     pygame.quit()
+    exit(0)
 
 def start_the_game():
+    pygame.mixer.init()
     pygame.mixer.music.load("audio/red_star.mp3")
     pygame.mixer.music.set_volume(0.25)
     pygame.mixer.music.play(0)
