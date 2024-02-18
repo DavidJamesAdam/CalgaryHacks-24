@@ -1,8 +1,11 @@
 # Example file showing a circle moving on screen
 import pygame
+import math
+
 from enemies import Enemy, spawn_enemy_at_edge
 from player import Player
 from levelManager import LevelManager
+
 
 
 
@@ -19,13 +22,14 @@ dt = 0
 all_sprites = pygame.sprite.Group() # create a group for all sprites
 player_group = pygame.sprite.Group() # create a group for the player
 enemies_group = pygame.sprite.Group() # create a group for the enemies
-#bullets_group = pygame.sprite.Group() # create a group for the bullets
+bullets_group = pygame.sprite.Group() # create a group for the bullets
 traps_group = pygame.sprite.Group() # create a group for the traps
 obstacles_group = pygame.sprite.Group() # create a group for the obstacles
 
 
 # create the player
 player = Player(screen)
+# weapons = weapon(screen, bullets_group)
 player_group.add(player) # add the player to the group
 
 # create the level manager
@@ -48,9 +52,15 @@ spawn_interval = 120
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
+    # Calculate the angle between the sprite and the mouse
+    dx, dy = pygame.mouse.get_pos() - pygame.Vector2(player.return_rect())
+    angle = math.degrees(math.atan2(-dy, dx))
+
     for event in pygame.event.get():
+        
         if event.type == pygame.QUIT:
             running = False
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # Get the position of the mouse click
             click_pos = pygame.mouse.get_pos()
@@ -61,6 +71,14 @@ while running:
                 if distance < enemy.radius:  # The click is within the enemy's circle
                     enemy.current_health -= 10  # Decrease health by 10
 
+
+        # elif event.type == pygame.K_q:
+        #     player.change_weapon(-1)
+        #     weapons.change_weapon(-1)
+        # elif event.type == pygame.K_e:
+        #     player.change_weapon(1)
+        #     weapons.change_weapon(1)
+
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
     screen.blit(bg, (0, 0))
@@ -69,7 +87,7 @@ while running:
     key = pygame.key.get_pressed()
 
     # Create collisiong checking for the player here
-    player.move(key, dt)
+    player.move(key, dt, angle)
     #screen.fill("purple")
 
     # sprite management

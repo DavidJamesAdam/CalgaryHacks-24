@@ -15,13 +15,33 @@ class Player(pygame.sprite.Sprite):
         self.image = self.original_image
         self.rect = self.image.get_rect()
         self.rect.center = (screen.get_width() / 2, screen.get_height() / 2)
+        wep_images = ["images/weapon1.png", "images/weapon2.png"]
         
+    def change_weapon(self, index):
+        ''' 
+        Temp class to change between two weapons.
+        Currently we only have one weapon so this is not used.
+        
+        '''
+        if index == 1:
+            self.image = pygame.image.load("images/weapon1.png")
+        elif index == -1:
+            self.image = pygame.image.load("images/weapon2.png")
+        
+    def update_image(self, image):
+        '''
+        Update the image of the player.
+        '''
+        self.image = pygame.image.load(image)
 
-        
-    def move(self, keys, dt):
-        # Calculate the angle between the sprite and the mouse
-        dx, dy = pygame.mouse.get_pos() - pygame.Vector2(self.rect.center)
-        angle = math.degrees(math.atan2(-dy, dx))
+    def return_rect(self):
+        '''
+        Return the center rectangle of the player.
+        '''
+        return self.rect.center
+
+    def move(self, keys, dt, angle):
+
 
         # Rotate the sprite to the angle
         self.image = pygame.transform.rotate(self.original_image, int(angle))
