@@ -1,7 +1,7 @@
 # Example file showing a circle moving on screen
 import pygame
 import math
-
+import pygame_menu
 
 from enemies import Enemy, spawn_enemy_at_edge
 from player import Player
@@ -12,15 +12,14 @@ MAX_HEALTH = 100
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 
-def main():
 
-    # pygame setup
-    pygame.init()
-    bg = pygame.image.load("images/background.jpg")
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    clock = pygame.time.Clock()
-    running = True
-    dt = 0
+# pygame setup
+pygame.init()
+bg = pygame.image.load("images/background.jpg")
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+clock = pygame.time.Clock()
+# running = True
+# dt = 0
 
     # sprite setup
     all_sprites = pygame.sprite.Group() # create a group for all sprites
@@ -47,16 +46,19 @@ def main():
 
     collidedWithWallList = []
 
-    # add the player to the all_sprites group
-    all_sprites.add(player) # add the player to the group
+# add the player to the all_sprites group
+all_sprites.add(player) # add the player to the group
+enemies = Enemy(start_x=0, start_y=0)
+enemies_list = []  # List to keep track of all enemies
+# spawn_timer = 0  # Timer to manage enemy spawns
+# spawn_interval = 240
 
 
-    enemies = Enemy(start_x=0, start_y=0)
-
-    enemies_list = []  # List to keep track of all enemies
+def main():
+    running = True
+    dt = 0
     spawn_timer = 0  # Timer to manage enemy spawns
     spawn_interval = 240
-
     while running:
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
@@ -156,4 +158,11 @@ def main():
 
     pygame.quit()
 
-main()
+def start_the_game():
+    main()
+    return
+
+menu = pygame_menu.Menu('Welcome', 400, 300, theme=pygame_menu.themes.THEME_BLUE)
+menu.add.button('Play', start_the_game)
+menu.add.button('Quit', pygame_menu.events.EXIT)
+menu.mainloop(surface)
