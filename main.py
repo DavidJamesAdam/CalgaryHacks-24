@@ -97,7 +97,7 @@ def main():
     running = True
     dt = 0
     spawn_timer = 0  # Timer to manage enemy spawns
-    spawn_interval = 120
+    spawn_interval = 80
     killcount = 50
     currentLevel = 0
 
