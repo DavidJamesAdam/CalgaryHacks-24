@@ -112,28 +112,29 @@ def main():
             # new_enemy = lvlManager.spawn_enemy_within_box(enemies.width, enemies.height)
             enemies_list.append(new_enemy)
         for enemy in enemies_list:
-            if hasattr(enemy, 'update'):
-                enemy.update(player.rect.center, screen.get_width(), screen.get_height())
+            if hasattr(enemy, 'update_teleport'):
+                enemy.update_teleport(player.rect.center, screen.get_width(), screen.get_height())
             else:
                 enemy.move_towards(player.rect.center)
             enemy.draw_health_bar(screen)  # Draw health bar above each enemy
-        enemies_group.update()
+        enemies_group.update(player.rect.center, screen.get_width(), screen.get_height())
         enemies_group.draw(screen)
         for enemy in enemies_list[:]:  # Iterate over a slice copy of the list to avoid modification issues
             # Check for defeated enemies
             if enemy.current_health <= 0:
                 enemies_list.remove(enemy)
+                enemies_group.remove(enemy)
+                enemies_group.update(player.rect.center, screen.get_width(), screen.get_height())
+                enemies_group.draw(screen)
                 continue  # Skip the rest of the loop for this enemy
 
-            # flip() the display to put your work on screen
-            pygame.display.flip()
-
-            # limits FPS to 60
-            # dt is delta time in seconds since last frame, used for framerate-
-            # independent physics.
-            dt = clock.tick(60) / 1000
-
-            lvlManager.updateLevel()
+        # flip() the display to put your work on screen
+        pygame.display.flip()
+        # limits FPS to 60
+        # dt is delta time in seconds since last frame, used for framerate-
+        # independent physics.
+        dt = clock.tick(60) / 1000
+        lvlManager.updateLevel()
 
     pygame.quit()
 

@@ -91,7 +91,7 @@ class TeleportingEnemy(Enemy):
         self.pos = [random.randint(self.radius, screen_width - self.radius),
                     random.randint(self.radius, screen_height - self.radius)]
 
-    def update(self, player_pos, screen_width, screen_height):
+    def update_teleport(self, player_pos, screen_width, screen_height):
         # Decrement the teleport timer
         self.frames_until_teleport -= 1
 
