@@ -22,3 +22,4 @@ escaping to the next room.
 # Important:
 - python3 --version == 3.12.1
 - pip install pygame
+- pip install pygame-menu -U
