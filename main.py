@@ -21,30 +21,30 @@ clock = pygame.time.Clock()
 # running = True
 # dt = 0
 
-    # sprite setup
-    all_sprites = pygame.sprite.Group() # create a group for all sprites
-    player_group = pygame.sprite.Group() # create a group for the player
-    enemies_group = pygame.sprite.Group() # create a group for the enemies
-    bullets_group = pygame.sprite.Group() # create a group for the bullets
-    traps_group = pygame.sprite.Group() # create a group for the traps
-    obstacles_group = pygame.sprite.Group() # create a group for the obstacles
+# sprite setup
+all_sprites = pygame.sprite.Group() # create a group for all sprites
+player_group = pygame.sprite.Group() # create a group for the player
+enemies_group = pygame.sprite.Group() # create a group for the enemies
+bullets_group = pygame.sprite.Group() # create a group for the bullets
+traps_group = pygame.sprite.Group() # create a group for the traps
+obstacles_group = pygame.sprite.Group() # create a group for the obstacles
 
 
-    # create the player
-    player = Player(screen, MAX_HEALTH)
-    # weapons = weapon(screen, bullets_group)
-    player_group.add(player) # add the player to the group
-    weapon = Weapon(screen, bullets_group)
+# create the player
+player = Player(screen, MAX_HEALTH)
+# weapons = weapon(screen, bullets_group)
+player_group.add(player) # add the player to the group
+weapon = Weapon(screen, bullets_group)
 
-    # create the level manager
-    surface = pygame.display.get_surface()
-    wallColour = pygame.Color(0,0,0)
-    wallStartThickness = 50
-    wallUpdateRate = 0.1
-    lvlManager = LevelManager(surface, wallColour, wallStartThickness, wallUpdateRate)
-    lvlManager.loadLevel(0)
+# create the level manager
+surface = pygame.display.get_surface()
+wallColour = pygame.Color(0,0,0)
+wallStartThickness = 50
+wallUpdateRate = 0.1
+lvlManager = LevelManager(surface, wallColour, wallStartThickness, wallUpdateRate)
+lvlManager.loadLevel(0)
 
-    collidedWithWallList = []
+collidedWithWallList = []
 
 # add the player to the all_sprites group
 all_sprites.add(player) # add the player to the group
@@ -75,7 +75,7 @@ def main():
                 # Get the position of the mouse click
                 click_pos = pygame.mouse.get_pos()
                 p_x, p_y = player.return_rect()
-                print(angle)
+                # print(angle)
                 weapon.fire(angle, p_x, p_y, screen)
 
                 # Check each enemy to see if it was clicked
@@ -98,8 +98,8 @@ def main():
             #     weapons.change_weapon(1)
 
         # fill the screen with a color to wipe away anything from last frame
-        screen.fill("purple")
-        screen.blit(bg, (0, 0))
+        # screen.fill("purple")
+        # screen.blit(bg, (0, 0))
         lvlManager.drawLevel()
 
         key = pygame.key.get_pressed()
