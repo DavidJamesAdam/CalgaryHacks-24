@@ -141,7 +141,13 @@ def main():
                 running = False
                 print("You died")
                 break
-    
+                
+
+        # wall_collisiong = lvlManager.detectWallCollisions(lvlManager, player)
+        # if wall_collisiong:
+        #     player.rect.x = player.old_x
+        #     player.rect.y = player.old_y
+        #     player.draw_health_bar()
         # Create collisiong checking for the player here
         #collidedWithWallList = lvlManager.detectWallCollisions(spriteGroup)
 

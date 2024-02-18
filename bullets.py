@@ -17,7 +17,7 @@ class Bullet(pygame.sprite.Sprite):
         self.angle = angle
         
         #Update location of bullet based on angle and dy and dx
-        self.speed = 2
+        self.speed = 8
         self.velocity_x = self.speed * math.cos(math.radians(self.angle))
         self.velocity_y = -(self.speed * math.sin(math.radians(self.angle)))
         self.damage = 50
