@@ -83,7 +83,7 @@ class LevelManager:
             return False  
     def updateLevel(self):
         # updatePx = number of pixels each box will be changed by each frame
-        updatePx = self.wallUpdateRate / 2
+        updatePx = self.wallUpdateRate / 1
         
         # if updatePx is too small, then don't update it this frame.
         # Instead, increment a counter that triggers adding one pixel at a future frame

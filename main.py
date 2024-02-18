@@ -35,6 +35,7 @@ lvlManager = None
 collidedWithWallList = None
 enemies = None
 enemies_list = None
+currentLevel = None
 
 
 def reset_game():
@@ -92,8 +93,9 @@ def main():
     running = True
     dt = 0
     spawn_timer = 0  # Timer to manage enemy spawns
-    spawn_interval = 240
+    spawn_interval = 120
     killcount = 20
+    currentLevel = 0
 
     while running:
         # poll for events
@@ -114,11 +116,6 @@ def main():
                 # print(angle)
                 weapon.fire(angle, p_x, p_y, screen)
 
-                # Check each enemy to see if it was clicked
-                for enemy in enemies_list:
-                    distance = ((enemy.pos[0] - click_pos[0]) ** 2 + (enemy.pos[1] - click_pos[1]) ** 2) ** 0.5
-                    if distance < enemy.radius:  # The click is within the enemy's circle
-                        enemy.current_health -= 10  # Decrease health by 10
                 # weapon.fire()
 
             # elif event.type == pygame.K_q:
@@ -210,6 +207,25 @@ def main():
         score_surface = font.render(f"Score: {player.score} | Kills left: {killcount}", True, (255, 255, 255))
         screen.blit(score_surface, (10, 10))
         # flip() the display to put your work on screen
+        # if running:
+        #     pygame.display.flip()
+        # # limits FPS to 60
+        # # dt is delta time in seconds since last frame, used for framerate-
+        # # independent physics.
+        # dt = clock.tick(60) / 1000
+        # lvlManager.updateLevel()
+
+        # go to next level
+        # if (lvlManager.portal.playerCollidesWithPortal):
+        #     if (currentLevel < lvlManager.lvls.numLevels()):
+        #         currentLevel += 1
+        #     else:
+        #         currentLevel = 0
+
+        #     lvlManager.loadLevel(currentLevel)
+        #     player.score = 0
+        #     lvlManager.portal.deactivatePortal()    
+
         if running:
             pygame.display.flip()
         # limits FPS to 60
@@ -217,17 +233,6 @@ def main():
         # independent physics.
         dt = clock.tick(60) / 1000
         lvlManager.updateLevel()
-
-        # go to next level
-        if (lvlManager.portal.playerCollidesWithPortal):
-            if (currentLevel < lvlManager.lvls.numLevels()):
-                currentLevel += 1
-            else:
-                currentLevel = 0
-
-            lvlManager.loadLevel(currentLevel)
-            player.score = 0
-            lvlManager.portal.deactivatePortal()    
         
     pygame.quit()
 
