@@ -90,7 +90,7 @@ def reset_game():
     enemies_list = []  # List to keep track of all enemies
 
     gun_sound = pygame.mixer.Sound("audio/gunshot.mp3")
-    gun_sound.set_volume(0.25)
+    gun_sound.set_volume(0.1)
 
 
 def main():

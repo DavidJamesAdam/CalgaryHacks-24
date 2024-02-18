@@ -74,25 +74,9 @@ class LevelManager:
             #pygame.draw.rect(self.surface, self.wallColour, self.levelRectangles[i]) #draw the box
             self.surface.blit(self.wallSprites[i].image,self.levelRectangles[i])
 
-        self.portal.drawPortal()
+        # self.portal.update()
             
-    # check collisions with walls and character.
-    # if there is a collision with a wall, move character away from wall
-    def detectWallCollisions(self):
-        # dict = pygame.sprite.groupcollide(self.wallSpriteGroup,spriteGroup,False,False)
-        collision = pygame.sprite.spritecollideany(self.player, self.wallSpriteGroup, pygame.sprite.collide_mask)
-        if collision is not None:
-            # # Determine the direction of the collision
-            # dx = self.player.rect.centerx - collision.rect.centerx
-            # dy = self.player.rect.centery - collision.rect.centery
-            # # Normalize the direction vector
-            # dist = math.hypot(dx, dy)
-            # dx, dy = dx / dist, dy / dist
-
-            # # Move the player away from the wall
-            # self.player.rect.x += dx * 10
-            # self.player.rect.y += dy * 10
-            self.player.go_to_old()
+    
 
   
         
@@ -124,6 +108,24 @@ class LevelManager:
             self.refitSprite(sprite)
 
         self.portal.updatePortal()
+
+    # check collisions with walls and character.
+    # if there is a collision with a wall, move character away from wall
+    def detectWallCollisions(self):
+        # dict = pygame.sprite.groupcollide(self.wallSpriteGroup,spriteGroup,False,False)
+        collision = pygame.sprite.spritecollideany(self.player, self.wallSpriteGroup, pygame.sprite.collide_mask)
+        if collision is not None:
+            # # Determine the direction of the collision
+            # dx = self.player.rect.centerx - collision.rect.centerx
+            # dy = self.player.rect.centery - collision.rect.centery
+            # # Normalize the direction vector
+            # dist = math.hypot(dx, dy)
+            # dx, dy = dx / dist, dy / dist
+
+            # # Move the player away from the wall
+            # self.player.rect.x += dx * 10
+            # self.player.rect.y += dy * 10
+            self.player.go_to_old()
 
     # later feature to add move the door, maybe other objects if it collides with any of the rectangles, if it does
 
