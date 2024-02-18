@@ -111,6 +111,7 @@ def main():
         
         lvlManager.drawLevel()
 
+
         key = pygame.key.get_pressed()
         player.move(key, dt, angle)
     
@@ -180,6 +181,9 @@ def main():
         #         enemies_group.update(player.rect.center, screen.get_width(), screen.get_height())
         #         enemies_group.draw(screen)
         #         continue  # Skip the rest of the loop for this enemy
+
+        # draw the rest of the level overtop of the enemies & sprites
+        lvlManager.drawLevel()
 
         # flip() the display to put your work on screen
         if running:
