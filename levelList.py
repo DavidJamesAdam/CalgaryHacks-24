@@ -13,7 +13,7 @@ class LevelList:
         level1 = [topWall, rightWall, leftWall, bottomWall]
 
         # level 2
-
+        
 
         # all levels
         self.levels = [level1]
@@ -22,8 +22,9 @@ class LevelList:
         return len(self.levels)
         
     def getLevel(self, levelNumber):
+        lvlToLoad = levelNumber
         if levelNumber >= self.numLevels() :
-            print("%d is not a valid level! Returning level[0] from getLevel() instead.")
-            return self.levels[0]
-        else :
-            return self.levels[levelNumber]
+            lvlToLoad = 0
+        
+        print( "Starting Level ",str(lvlToLoad))
+        return self.levels[lvlToLoad]
