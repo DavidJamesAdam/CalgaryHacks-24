@@ -22,12 +22,13 @@ clock = pygame.time.Clock()
 # dt = 0
 
 # sprite setup
-all_sprites = pygame.sprite.Group() # create a group for all sprites
+all_sprites = pygame.sprite.Group() # create a group for all sprites (except walls)
 player_group = pygame.sprite.Group() # create a group for the player
 enemies_group = pygame.sprite.Group() # create a group for the enemies
 bullets_group = pygame.sprite.Group() # create a group for the bullets
 traps_group = pygame.sprite.Group() # create a group for the traps
 obstacles_group = pygame.sprite.Group() # create a group for the obstacles
+wall_group = pygame.sprite.Group() # create a group for walls
 
 
 # create the player
@@ -41,7 +42,7 @@ surface = pygame.display.get_surface()
 wallColour = pygame.Color(0,0,0)
 wallStartThickness = 50
 wallUpdateRate = 0.1
-lvlManager = LevelManager(surface, wallColour, wallStartThickness, wallUpdateRate)
+lvlManager = LevelManager(surface, wallColour, wallStartThickness, wallUpdateRate, wall_group)
 lvlManager.loadLevel(0)
 
 collidedWithWallList = []
@@ -115,7 +116,7 @@ def main():
     
     
         # Create collisiong checking for the player here
-        collidedWithWallList = lvlManager.detectCollisions()
+        #collidedWithWallList = lvlManager.detectWallCollisions(spriteGroup)
         player.move(key, dt, angle)
     
 
