@@ -153,8 +153,7 @@ def main():
         all_sprites.update()
         all_sprites.draw(screen)
   
-        score_surface = font.render(f"Score: {player.score} | Kills left: {killcount}", True, (255, 255, 255))
-        screen.blit(score_surface, (10, 10))
+        
 
         spawn_timer += 1
         if spawn_timer >= spawn_interval:
@@ -184,7 +183,9 @@ def main():
 
         # draw the rest of the level overtop of the enemies & sprites
         lvlManager.drawLevel()
-
+        
+        score_surface = font.render(f"Score: {player.score} | Kills left: {killcount}", True, (255, 255, 255))
+        screen.blit(score_surface, (10, 10))
         # flip() the display to put your work on screen
         if running:
             pygame.display.flip()
