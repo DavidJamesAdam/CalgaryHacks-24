@@ -36,6 +36,7 @@ collidedWithWallList = None
 enemies = None
 enemies_list = None
 currentLevel = None
+currentLevel = None
 
 
 def reset_game():
@@ -75,6 +76,7 @@ def reset_game():
     wallColour = pygame.Color(0,0,0)
     wallStartThickness = 50
     wallUpdateRate = 0.1
+
     currentLevel = 0
     lvlManager = LevelManager(surface, wallColour, wallStartThickness, wallUpdateRate, wall_group, player)
     lvlManager.loadLevel(currentLevel)
@@ -132,7 +134,7 @@ def main():
         lvlManager.drawLevel()
         key = pygame.key.get_pressed()
         player.move(key, dt, angle)
-        bullet_collision = pygame.sprite.groupcollide(bullets_group, enemies_group, False, False)
+        bullet_collision = pygame.sprite.groupcollide(bullets_group, enemies_group, False, False, pygame.sprite.collide_mask)
 
         for bullet, enemy in bullet_collision.items():
             enemy[0].current_health -= bullet.damage
@@ -151,7 +153,7 @@ def main():
         #     print("Level Up")
                  
         # enemy collision detection
-        enemy_collision = pygame.sprite.spritecollide(player, enemies_group, False)
+        enemy_collision = pygame.sprite.spritecollide(player, enemies_group, False, pygame.sprite.collide_mask)
         for enemy in enemy_collision:
             player.curr_health -= enemy.damage
             
@@ -163,10 +165,19 @@ def main():
                 return
                 
         # Wall collision
-        wall_collisiong = lvlManager.detectWallCollisions(player)
-        if wall_collisiong:
-            player.rect.x = player.old_x
-            player.rect.y = player.old_y
+        lvlManager.detectWallCollisions()
+        # if collision:
+        #     # Determine the direction of the collision
+        #     dx = player.rect.centerx - collided_wall.rect.centerx
+        #     dy = player.rect.centery - collided_wall.rect.centery
+
+        #     # Normalize the direction vector
+        #     dist = math.hypot(dx, dy)
+        #     dx, dy = dx / dist, dy / dist
+
+        #     # Move the player away from the wall
+        #     player.rect.x += dx * 10
+        #     player.rect.y += dy * 10
 
         # sprite management
         bullets_group.update()
@@ -233,6 +244,17 @@ def main():
         # independent physics.
         dt = clock.tick(60) / 1000
         lvlManager.updateLevel()
+
+        # # go to next level
+        # if (lvlManager.portal.playerCollidesWithPortal):
+        #     if (currentLevel < lvlManager.lvls.numLevels()):
+        #         currentLevel += 1
+        #     else:
+        #         currentLevel = 0
+
+        #     lvlManager.loadLevel(currentLevel)
+        #     player.score = 0
+        #     lvlManager.portal.deactivatePortal()    
         
     pygame.quit()
 
@@ -242,6 +264,9 @@ def start_the_game():
 
 def display_menu():
     menu = pygame_menu.Menu('CLAUSTROPHOBIA: Escape the Martian Ship before time runs out', 1280, 720, theme=pygame_menu.themes.THEME_GREEN)
+    menu.add.label('Lil\' Wayne the Martian has been kidnapped by evil aliens.', font_color='black')
+    menu.add.label('Dropped off on an alien landscape he must survive the onslaught', font_color='black')
+    menu.add.label('of hostile aliens and the encroaching sentient landscape.', font_color='black')
     menu.add.button('Play', start_the_game)
     menu.add.button('Quit', pygame_menu.events.EXIT)
     menu.mainloop(surface)

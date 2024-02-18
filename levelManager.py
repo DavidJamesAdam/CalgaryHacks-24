@@ -1,4 +1,6 @@
 import pygame
+import math
+from player import Player
 from levelList import LevelList
 from portal import Portal
 
@@ -74,13 +76,27 @@ class LevelManager:
 
         self.portal.drawPortal()
             
-    # check collisions with level
-    def detectWallCollisions(self,spriteGroup):
+    # check collisions with walls and character.
+    # if there is a collision with a wall, move character away from wall
+    def detectWallCollisions(self):
         # dict = pygame.sprite.groupcollide(self.wallSpriteGroup,spriteGroup,False,False)
-        if pygame.sprite.spritecollideany(spriteGroup,self.wallSpriteGroup):
-            return True
-        else:
-            return False  
+        collision = pygame.sprite.spritecollideany(self.player, self.wallSpriteGroup, pygame.sprite.collide_mask)
+        if collision is not None:
+            # # Determine the direction of the collision
+            # dx = self.player.rect.centerx - collision.rect.centerx
+            # dy = self.player.rect.centery - collision.rect.centery
+            # # Normalize the direction vector
+            # dist = math.hypot(dx, dy)
+            # dx, dy = dx / dist, dy / dist
+
+            # # Move the player away from the wall
+            # self.player.rect.x += dx * 10
+            # self.player.rect.y += dy * 10
+            self.player.go_to_old()
+
+  
+        
+        
     def updateLevel(self):
         # updatePx = number of pixels each box will be changed by each frame
         updatePx = self.wallUpdateRate / 1
