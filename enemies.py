@@ -33,6 +33,8 @@ class Enemy:
         self.pos[0] += direction[0] * self.speed
         self.pos[1] += direction[1] * self.speed
 
+        self.rect.center = (self.pos[0], self.pos[1])
+
     def draw_health_bar(self, screen):
         # Health bar settings
         bar_width = 40
@@ -55,20 +57,20 @@ class Enemy:
 class RegularEnemy(Enemy):
      def __init__(self, start_x, start_y):
         super().__init__(start_x, start_y, radius=15, max_health=100, speed=2)
-        self.image = pygame.image.load('path_to_fast_enemy_sprite.png').convert_alpha()
+        self.image = pygame.image.load("images/alien_2.png").convert_alpha()
         self.rect = self.image.get_rect(center=(start_x, start_y))
         
 
 class FastEnemy(Enemy):
     def __init__(self, start_x, start_y):
         super().__init__(start_x, start_y, radius=8, max_health=50, speed=4)
-        self.image = pygame.image.load('path_to_fast_enemy_sprite.png').convert_alpha()
+        self.image = pygame.image.load("images/fast_alien.png").convert_alpha()
         self.rect = self.image.get_rect(center=(start_x, start_y))
 
 class StrongEnemy(Enemy):
     def __init__(self, start_x, start_y):
         super().__init__(start_x, start_y, radius=15, max_health=200, speed=1)
-        self.image = pygame.image.load('path_to_fast_enemy_sprite.png').convert_alpha()
+        self.image = pygame.image.load("images/strong_alien.png").convert_alpha()
         self.rect = self.image.get_rect(center=(start_x, start_y))
 
 class TeleportingEnemy(Enemy):
@@ -76,7 +78,7 @@ class TeleportingEnemy(Enemy):
         super().__init__(start_x, start_y, radius=12, max_health=80, speed=0)
         self.teleport_interval = teleport_interval  # Frames until next teleport
         self.frames_until_teleport = teleport_interval
-        self.image = pygame.image.load('path_to_fast_enemy_sprite.png').convert_alpha()
+        self.image = pygame.image.load("images/teleport_alien.png").convert_alpha()
         self.rect = self.image.get_rect(center=(start_x, start_y))
 
     def teleport(self, screen_width, screen_height):
