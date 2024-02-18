@@ -47,7 +47,7 @@ enemies = Enemy(start_x=0, start_y=0)
 
 enemies_list = []  # List to keep track of all enemies
 spawn_timer = 0  # Timer to manage enemy spawns
-spawn_interval = 120
+spawn_interval = 240
 
 while running:
     # poll for events
